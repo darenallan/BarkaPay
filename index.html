@@ -1,1818 +1,2942 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="fr">
-<head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>BarkaPay × TotalEnergies — Partenariat Digital Burkina Faso</title>
-<link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;600;700;800&family=Plus+Jakarta+Sans:ital,wght@0,300;0,400;0,500;0,600;1,300&display=swap" rel="stylesheet">
-<script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.0/chart.umd.min.js"></script>
-<style>
-:root {
-  /* TotalEnergies spectrum palette */
-  --te-red:    #DA291C;
-  --te-red-dk: #b52015;
-  --te-orange: #F16E00;
-  --te-yellow: #FFD700;
-  --te-green:  #50BE87;
-  --te-blue:   #085EBD;
-  --te-indigo: #3B4DA0;
-  --te-violet: #7B2D8B;
-
-  /* Accent / glow */
-  --red-glow:  rgba(218,41,28,0.18);
-  --gold:      #F5A623;
-
-  /* Dark background scale */
-  --navy:      #07111F;
-  --navy-mid:  #0C1A2E;
-  --navy-light:#132340;
-  --navy-card: #0E1F35;
-
-  /* Neutrals */
-  --white: #F4F6F8;
-  --gray:  #7A8899;
-
-  /* Spectrum gradient (used everywhere) */
-  --spectrum: linear-gradient(90deg,
-    var(--te-red) 0%,
-    var(--te-orange) 20%,
-    var(--te-yellow) 38%,
-    var(--te-green)  55%,
-    var(--te-blue)   72%,
-    var(--te-indigo) 86%,
-    var(--te-violet) 100%
-  );
-
-  --radius:    6px;
-  --radius-sm: 3px;
-}
-
-*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
-html { scroll-behavior: smooth; font-size: 16px; }
-
-body {
-  font-family: 'Plus Jakarta Sans', sans-serif;
-  background: var(--navy);
-  color: var(--white);
-  overflow-x: hidden;
-  -webkit-font-smoothing: antialiased;
-}
-
-/* ─── SCROLLBAR ─── */
-::-webkit-scrollbar { width: 4px; }
-::-webkit-scrollbar-track { background: var(--navy); }
-::-webkit-scrollbar-thumb { background: var(--spectrum); border-radius: 2px; }
-
-/* ─── NAV ─── */
-
-/* --- MISE À JOUR DU NAV (HEADER) --- */
-nav {
-  position: fixed; 
-  top: 0; left: 0; right: 0; 
-  z-index: 1000;
-  display: flex; 
-  align-items: center; 
-  justify-content: space-between;
-  padding: 0 5rem; /* On retire le padding vertical pour gérer la hauteur via 'height' */
-  height: 80px;
-  background: rgba(7, 17, 31, 0.95);
-  backdrop-filter: blur(20px);
-  border-bottom: 1px solid rgba(255, 255, 255, 0.08);
-}
-
-.nav-logo {
-  display: flex;
-  align-items: center;
-  gap: 12px;
-  text-decoration: none;
-  min-width: fit-content;
-}
-
-.logo-bp {
-  font-family: 'Syne', sans-serif;
-  font-weight: 800;
-  font-size: 1.4rem;
-  letter-spacing: -0.04em;
-  color: var(--te-orange);
-}
-
-.logo-sep {
-  color: rgba(255, 255, 255, 0.2);
-  font-size: 1.2rem;
-  font-weight: 300;
-}
-
-.logo-te {
-  font-family: 'Syne', sans-serif;
-  font-weight: 700;
-  font-size: 1.3rem;
-  letter-spacing: -0.02em;
-  color: var(--white); /* Blanc pour plus de classe sur fond noir */
-}
-
-.nav-links {
-  display: flex;
-  gap: 1.5rem;
-  list-style: none;
-  margin: 0 2rem;
-}
-
-.nav-links a {
-  font-size: 0.72rem;
-  font-weight: 600;
-  letter-spacing: 0.08em;
-  text-transform: uppercase;
-  color: var(--gray);
-  text-decoration: none;
-  transition: all 0.3s ease;
-  white-space: nowrap;
-}
-
-.nav-links a:hover {
-  color: var(--te-orange);
-}
-
-.nav-cta {
-  background: var(--te-red);
-  color: var(--white);
-  border: none;
-  padding: 12px 24px;
-  border-radius: 4px;
-  font-family: 'Syne', sans-serif;
-  font-weight: 700;
-  font-size: 0.75rem;
-  letter-spacing: 0.05em;
-  text-transform: uppercase;
-  cursor: pointer;
-  transition: all 0.3s;
-  flex-shrink: 0; /* Empêche le bouton de s'écraser */
-}
-
-.nav-cta:hover {
-  background: var(--te-red-dk);
-  box-shadow: 0 0 20px rgba(218, 41, 28, 0.4);
-  transform: translateY(-2px);
-}
-
-/* --- BARRE DE SPECTRE SOUS LE NAV --- */
-.nav-spectrum-bar {
-  position: absolute;
-  bottom: 0;
-  left: 0;
-  right: 0;
-  height: 3px;
-  background: var(--spectrum);
-}
-
-/* --- AJUSTEMENT MOBILE --- */
-@media (max-width: 1100px) {
-  nav { padding: 0 2rem; }
-  .nav-links { display: none; } /* On cache les liens sur tablette pour éviter le chevauchement */
-}
-
-
-
-/* ─── HERO ─── */
-.hero {
-  min-height: 100vh; display: flex; align-items: center;
-  padding: 9rem 5rem 5rem; position: relative; overflow: hidden;
-}
-.hero-bg {
-  position: absolute; inset: 0; z-index: 0;
-  background:
-    radial-gradient(ellipse 55% 65% at 72% 48%, rgba(218,41,28,0.1) 0%, transparent 50%),
-    radial-gradient(ellipse 40% 50% at 15% 80%, rgba(8,94,189,0.08) 0%, transparent 50%),
-    radial-gradient(ellipse 30% 40% at 85% 20%, rgba(241,110,0,0.06) 0%, transparent 50%),
-    linear-gradient(160deg, var(--navy) 0%, #071425 100%);
-}
-.hero-bg::after {
-  content: ''; position: absolute; inset: 0;
-  background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noise)' opacity='0.035'/%3E%3C/svg%3E");
-  opacity: 0.4; pointer-events: none;
-}
-.hero-grid {
-  position: absolute; inset: 0; z-index: 0;
-  background-image:
-    linear-gradient(rgba(255,255,255,0.022) 1px, transparent 1px),
-    linear-gradient(90deg, rgba(255,255,255,0.022) 1px, transparent 1px);
-  background-size: 72px 72px;
-  mask-image: radial-gradient(ellipse 70% 70% at 50% 40%, black 20%, transparent 100%);
-}
-/* TotalEnergies spectrum line across hero bottom */
-.hero-spectrum {
-  position: absolute; bottom: 0; left: 0; right: 0; height: 2px; z-index: 2;
-  background: var(--spectrum);
-  filter: blur(0px);
-}
-.hero-content { position: relative; z-index: 1; max-width: 700px; }
-
-.hero-badge {
-  display: inline-flex; align-items: center; gap: 0.6rem;
-  background: rgba(218,41,28,0.1); border: 1px solid rgba(218,41,28,0.25);
-  border-radius: 100px; padding: 0.35rem 1rem;
-  font-size: 0.72rem; letter-spacing: 0.1em; text-transform: uppercase;
-  color: #ff8a78; margin-bottom: 2.2rem;
-  animation: fadeUp 0.9s ease both;
-}
-.badge-dot { width: 5px; height: 5px; border-radius: 50%; background: var(--te-orange); animation: blink 1.5s infinite; }
-@keyframes blink { 0%,100%{opacity:1}50%{opacity:0.3} }
-
-.hero-title {
-  font-family: 'Syne', sans-serif; font-weight: 800;
-  font-size: clamp(3rem, 6.2vw, 5.5rem); line-height: 0.92;
-  letter-spacing: -0.05em; margin-bottom: 1.6rem;
-  animation: fadeUp 0.9s 0.1s ease both;
-}
-.hero-title .accent-orange { color: var(--te-orange); }
-.hero-title .accent-red { color: var(--te-red); }
-.hero-title .dim { color: rgba(244,246,248,0.28); display: block; }
-
-.hero-partner-badge {
-  display: inline-flex; align-items: center; gap: 0.5rem;
-  margin-bottom: 0.8rem;
-  animation: fadeUp 0.9s 0.05s ease both;
-}
-.partner-pill {
-  font-size: 0.65rem; letter-spacing: 0.12em; text-transform: uppercase;
-  background: rgba(218,41,28,0.12); border: 1px solid rgba(218,41,28,0.3);
-  border-radius: 100px; padding: 0.25rem 0.7rem; color: var(--te-red);
-}
-.partner-x { color: rgba(255,255,255,0.3); font-size: 0.75rem; }
-.partner-pill.te { background: rgba(8,94,189,0.12); border-color: rgba(8,94,189,0.3); color: var(--te-blue); }
-
-.hero-sub {
-  font-size: 1.05rem; font-weight: 300; line-height: 1.75;
-  color: var(--gray); max-width: 530px; margin-bottom: 3rem;
-  animation: fadeUp 0.9s 0.2s ease both;
-}
-.hero-sub strong { color: rgba(244,246,248,0.8); font-weight: 500; }
-
-.hero-actions {
-  display: flex; gap: 0.8rem; flex-wrap: wrap;
-  animation: fadeUp 0.9s 0.3s ease both;
-}
-.btn-primary {
-  background: var(--te-red); color: var(--white);
-  padding: 0.85rem 1.8rem; border: none; border-radius: var(--radius-sm);
-  font-family: 'Syne', sans-serif; font-weight: 700;
-  font-size: 0.8rem; letter-spacing: 0.07em; text-transform: uppercase;
-  cursor: pointer; transition: all 0.25s; text-decoration: none; display: inline-block;
-}
-.btn-primary:hover {
-  background: var(--te-red-dk); transform: translateY(-2px);
-  box-shadow: 0 10px 30px rgba(218,41,28,0.3);
-}
-.btn-outline {
-  background: transparent; color: var(--white);
-  padding: 0.85rem 1.8rem; border: 1px solid rgba(255,255,255,0.15);
-  border-radius: var(--radius-sm);
-  font-family: 'Syne', sans-serif; font-weight: 600;
-  font-size: 0.8rem; letter-spacing: 0.07em; text-transform: uppercase;
-  cursor: pointer; transition: all 0.25s; text-decoration: none; display: inline-block;
-}
-.btn-outline:hover { border-color: rgba(255,255,255,0.4); background: rgba(255,255,255,0.04); }
-
-/* Hero stats floating panel */
-.hero-stats {
-  position: absolute; right: 5rem; top: 50%; transform: translateY(-50%);
-  display: flex; flex-direction: column; gap: 1rem; z-index: 1;
-  animation: fadeLeft 1s 0.4s ease both;
-}
-.stat-card {
-  background: rgba(255,255,255,0.03);
-  border: 1px solid rgba(255,255,255,0.07);
-  border-radius: var(--radius); padding: 1.4rem 1.8rem;
-  min-width: 210px; position: relative; overflow: hidden;
-  transition: border-color 0.3s, transform 0.3s, background 0.3s;
-  backdrop-filter: blur(10px);
-}
-.stat-card:hover {
-  border-color: rgba(241,110,0,0.35);
-  background: rgba(241,110,0,0.04);
-  transform: translateX(-5px);
-}
-.stat-card::before {
-  content: ''; position: absolute; left: 0; top: 0; bottom: 0;
-  width: 2px; background: var(--spectrum);
-}
-.stat-val {
-  font-family: 'Syne', sans-serif; font-weight: 800;
-  font-size: 2.1rem; letter-spacing: -0.05em; color: var(--white); line-height: 1;
-}
-.stat-val .unit { font-size: 1rem; color: var(--te-orange); }
-.stat-label { font-size: 0.72rem; color: var(--gray); letter-spacing: 0.05em; text-transform: uppercase; margin-top: 0.3rem; }
-.stat-growth { font-size: 0.75rem; color: var(--te-green); margin-top: 0.4rem; display: flex; align-items: center; gap: 0.3rem; }
-
-@keyframes fadeUp { from{opacity:0;transform:translateY(28px)}to{opacity:1;transform:translateY(0)} }
-@keyframes fadeLeft { from{opacity:0;transform:translateX(28px)}to{opacity:1;transform:translateX(0)} }
-
-/* ─── METRICS BAR ─── */
-.metrics-bar {
-  background: var(--navy-mid);
-  border-top: 1px solid rgba(255,255,255,0.05);
-  border-bottom: 1px solid rgba(255,255,255,0.05);
-  padding: 0 5rem;
-  display: grid; grid-template-columns: repeat(4, 1fr);
-}
-.metric-item {
-  text-align: center; padding: 2.2rem 1rem;
-  position: relative; transition: background 0.2s;
-}
-.metric-item:hover { background: rgba(241,110,0,0.04); }
-.metric-item:not(:last-child)::after {
-  content: ''; position: absolute; right: 0; top: 20%; bottom: 20%;
-  width: 1px; background: rgba(255,255,255,0.06);
-}
-.metric-num {
-  font-family: 'Syne', sans-serif; font-weight: 800;
-  font-size: 2.5rem; letter-spacing: -0.05em; color: var(--white); line-height: 1;
-}
-.metric-num .unit { font-size: 1.2rem; color: var(--te-orange); }
-.metric-desc { font-size: 0.75rem; color: var(--gray); margin-top: 0.4rem; letter-spacing: 0.04em; }
-
-/* ─── SECTIONS BASE ─── */
-section { padding: 6rem 5rem; }
-.section-label {
-  font-size: 0.7rem; letter-spacing: 0.15em; text-transform: uppercase;
-  color: var(--te-orange); margin-bottom: 0.9rem; display: flex; align-items: center; gap: 0.6rem;
-}
-.section-label::before { content:''; display:inline-block; width:20px; height:1px; background: var(--spectrum); }
-.section-title {
-  font-family: 'Syne', sans-serif; font-weight: 800;
-  font-size: clamp(2rem, 4vw, 3rem); letter-spacing: -0.04em;
-  line-height: 1.05; margin-bottom: 1.2rem;
-}
-.section-sub {
-  font-size: 1rem; font-weight: 300; color: var(--gray);
-  line-height: 1.8; max-width: 580px; margin-bottom: 3.5rem;
-}
-
-/* ─── HOW IT WORKS ─── */
-.how-section { background: var(--navy-mid); }
-
-.steps-flow {
-  display: grid; grid-template-columns: repeat(6, 1fr);
-  gap: 0; position: relative;
-}
-.steps-connector {
-  position: absolute; top: 39px; left: calc(100%/12); right: calc(100%/12);
-  height: 1px; z-index: 0;
-  background: var(--spectrum);
-  opacity: 0.55;
-}
-.steps-connector::after {
-  content: ''; position: absolute; inset: -1px;
-  background: inherit; filter: blur(4px); opacity: 0.5;
-}
-.step-item {
-  display: flex; flex-direction: column; align-items: center;
-  text-align: center; padding: 0 0.8rem; position: relative; z-index: 1;
-}
-.step-num {
-  width: 78px; height: 78px; border-radius: 50%;
-  background: var(--navy);
-  border: 1.5px solid rgba(241,110,0,0.25);
-  display: flex; align-items: center; justify-content: center;
-  font-size: 1.8rem; margin-bottom: 1.3rem;
-  transition: border-color 0.3s, box-shadow 0.3s, transform 0.3s;
-  position: relative;
-}
-.step-item:hover .step-num {
-  border-color: var(--te-orange);
-  box-shadow: 0 0 24px rgba(241,110,0,0.2);
-  transform: scale(1.06);
-}
-.step-count {
-  position: absolute; top: -4px; right: -4px;
-  width: 20px; height: 20px; border-radius: 50%;
-  background: var(--te-red); color: white;
-  font-family: 'Syne', sans-serif; font-weight: 800; font-size: 0.6rem;
-  display: flex; align-items: center; justify-content: center;
-}
-.step-title {
-  font-family: 'Syne', sans-serif; font-weight: 700;
-  font-size: 0.85rem; margin-bottom: 0.5rem;
-}
-.step-desc { font-size: 0.76rem; color: var(--gray); line-height: 1.55; }
-
-/* ─── FEATURES ─── */
-.features-grid {
-  display: grid; grid-template-columns: repeat(3, 1fr);
-  gap: 1px; background: rgba(255,255,255,0.05);
-  border-radius: var(--radius); overflow: hidden;
-  border: 1px solid rgba(255,255,255,0.05);
-}
-.feature-card {
-  background: var(--navy-card); padding: 2.5rem;
-  transition: background 0.3s; position: relative; overflow: hidden;
-}
-.feature-card::before {
-  content: ''; position: absolute;
-  top: 0; left: 0; right: 0; height: 1px;
-  background: var(--spectrum);
-  transform: scaleX(0); transition: transform 0.4s;
-}
-.feature-card:hover { background: var(--navy-light); }
-.feature-card:hover::before { transform: scaleX(1); }
-.feat-icon { font-size: 2rem; margin-bottom: 1.2rem; display: block; }
-.feat-title {
-  font-family: 'Syne', sans-serif; font-weight: 700;
-  font-size: 1rem; margin-bottom: 0.7rem;
-}
-.feat-desc { font-size: 0.875rem; color: var(--gray); line-height: 1.65; }
-.feat-tags { margin-top: 1.3rem; display: flex; gap: 0.4rem; flex-wrap: wrap; }
-.feat-tag {
-  font-size: 0.67rem; letter-spacing: 0.07em; text-transform: uppercase;
-  background: rgba(241,110,0,0.08); color: var(--te-orange);
-  border: 1px solid rgba(241,110,0,0.2); padding: 0.22rem 0.55rem;
-  border-radius: 100px;
-}
-.feat-tag.blue { background: rgba(8,94,189,0.08); color: var(--te-blue); border-color: rgba(8,94,189,0.2); }
-.feat-tag.green { background: rgba(80,190,135,0.08); color: var(--te-green); border-color: rgba(80,190,135,0.2); }
-.feat-tag.gold { background: rgba(245,166,35,0.08); color: var(--gold); border-color: rgba(245,166,35,0.2); }
-
-/* ─── AVANTAGE PÉTROLIER (new section) ─── */
-.petro-section { background: var(--navy-mid); position: relative; overflow: hidden; }
-.petro-section::before {
-  content: ''; position: absolute; left: 0; top: 0; bottom: 0; width: 3px;
-  background: var(--spectrum);
-}
-.petro-grid {
-  display: grid; grid-template-columns: repeat(2, 1fr);
-  gap: 2rem; margin-bottom: 3.5rem;
-}
-.petro-card {
-  background: var(--navy-card); border: 1px solid rgba(255,255,255,0.06);
-  border-radius: var(--radius); padding: 2.5rem;
-  position: relative; overflow: hidden; transition: background 0.3s, border-color 0.3s;
-}
-.petro-card:hover { background: var(--navy-light); border-color: rgba(241,110,0,0.25); }
-.petro-card::after {
-  content: ''; position: absolute; bottom: 0; left: 0; right: 0; height: 2px;
-  background: var(--spectrum);
-  transform: scaleX(0); transition: transform 0.4s; transform-origin: left;
-}
-.petro-card:hover::after { transform: scaleX(1); }
-.petro-icon { font-size: 2.5rem; margin-bottom: 1.2rem; display: block; }
-.petro-title {
-  font-family: 'Syne', sans-serif; font-weight: 800;
-  font-size: 1.15rem; letter-spacing: -0.03em; margin-bottom: 0.7rem;
-}
-.petro-title span { color: var(--te-orange); }
-.petro-desc { font-size: 0.9rem; color: var(--gray); line-height: 1.75; }
-.petro-desc strong { color: rgba(244,246,248,0.85); font-weight: 500; }
-.petro-kpis {
-  display: flex; gap: 1.5rem; margin-top: 1.5rem; flex-wrap: wrap;
-}
-.petro-kpi { text-align: center; }
-.petro-kpi-val {
-  font-family: 'Syne', sans-serif; font-weight: 800;
-  font-size: 1.6rem; letter-spacing: -0.04em; line-height: 1;
-  background: var(--spectrum); -webkit-background-clip: text; -webkit-text-fill-color: transparent;
-  background-clip: text;
-}
-.petro-kpi-label { font-size: 0.65rem; color: var(--gray); margin-top: 0.2rem; text-transform: uppercase; letter-spacing: 0.06em; }
-
-/* Station map mockup */
-.station-map {
-  background: var(--navy-card); border: 1px solid rgba(241,110,0,0.2);
-  border-radius: var(--radius); padding: 2.5rem; margin-top: 0.5rem;
-}
-.station-map-header {
-  display: flex; justify-content: space-between; align-items: center; margin-bottom: 2rem;
-}
-.station-map-title { font-family: 'Syne', sans-serif; font-weight: 800; font-size: 1rem; }
-.station-map-sub { font-size: 0.75rem; color: var(--gray); margin-top: 0.2rem; }
-.station-map-legend { display: flex; gap: 1.2rem; align-items: center; }
-.legend-dot-te { width: 10px; height: 10px; border-radius: 50%; }
-.legend-label { font-size: 0.72rem; color: var(--gray); }
-.station-map-grid {
-  display: grid; grid-template-columns: repeat(3, 1fr); gap: 1rem;
-}
-.station-pin {
-  background: rgba(255,255,255,0.03); border: 1px solid rgba(255,255,255,0.06);
-  border-radius: var(--radius-sm); padding: 1.2rem;
-  transition: border-color 0.25s, background 0.25s;
-}
-.station-pin:hover { border-color: rgba(241,110,0,0.3); background: rgba(241,110,0,0.04); }
-.station-pin-city {
-  font-family: 'Syne', sans-serif; font-weight: 700; font-size: 0.85rem;
-  margin-bottom: 0.3rem; display: flex; align-items: center; gap: 0.45rem;
-}
-.station-pin-city .city-dot { width: 6px; height: 6px; border-radius: 50%; background: var(--te-red); }
-.station-pin-city .city-dot.ouaga { background: var(--te-orange); }
-.station-pin-name { font-size: 0.78rem; color: rgba(244,246,248,0.6); margin-bottom: 0.6rem; }
-.station-pin-stats { display: flex; justify-content: space-between; }
-.station-pin-stat-val { font-family: 'Syne', sans-serif; font-weight: 700; font-size: 0.9rem; color: var(--te-green); }
-.station-pin-stat-label { font-size: 0.65rem; color: var(--gray); margin-top: 0.1rem; }
-.station-status-badge {
-  font-size: 0.62rem; letter-spacing: 0.08em; text-transform: uppercase;
-  border-radius: 100px; padding: 0.2rem 0.5rem; margin-top: 0.8rem; display: inline-block;
-}
-.status-live { background: rgba(80,190,135,0.1); color: var(--te-green); border: 1px solid rgba(80,190,135,0.2); }
-.status-soon { background: rgba(241,110,0,0.1); color: var(--te-orange); border: 1px solid rgba(241,110,0,0.2); }
-
-/* ─── CHARTS ─── */
-.charts-section { background: var(--navy); }
-
-.charts-tabs {
-  display: flex; gap: 0.3rem; margin-bottom: 2.5rem;
-  background: rgba(255,255,255,0.03); border-radius: var(--radius);
-  padding: 0.3rem; width: fit-content;
-}
-.tab-btn {
-  background: none; border: none; color: var(--gray);
-  font-family: 'Syne', sans-serif; font-weight: 600;
-  font-size: 0.78rem; letter-spacing: 0.06em; text-transform: uppercase;
-  padding: 0.6rem 1.4rem; cursor: pointer; border-radius: var(--radius-sm);
-  transition: color 0.2s, background 0.2s;
-}
-.tab-btn:hover { color: var(--white); }
-.tab-btn.active { color: var(--white); background: var(--te-red); }
-
-.chart-panel { display: none; }
-.chart-panel.active { display: grid; grid-template-columns: 1fr 1fr; gap: 1.5rem; }
-.chart-panel.single-col.active { display: block; }
-
-.chart-box {
-  background: var(--navy-card);
-  border: 1px solid rgba(255,255,255,0.06);
-  border-radius: var(--radius); padding: 1.8rem;
-  transition: border-color 0.3s;
-}
-.chart-box:hover { border-color: rgba(241,110,0,0.2); }
-.chart-box-title {
-  font-family: 'Syne', sans-serif; font-weight: 700;
-  font-size: 0.82rem; letter-spacing: 0.05em; margin-bottom: 1.5rem;
-  color: rgba(244,246,248,0.55); text-transform: uppercase;
-}
-.chart-box canvas { max-height: 250px; width: 100% !important; }
-.chart-legend { display: flex; gap: 1.2rem; flex-wrap: wrap; margin-top: 1rem; }
-.legend-item { display: flex; align-items: center; gap: 0.4rem; font-size: 0.75rem; color: var(--gray); }
-.legend-dot { width: 8px; height: 8px; border-radius: 50%; flex-shrink: 0; }
-
-/* ─── FINANCIAL TABLE ─── */
-.finance-section { background: var(--navy-mid); }
-.finance-table { width: 100%; border-collapse: collapse; margin-bottom: 3rem; }
-.finance-table th {
-  font-family: 'Syne', sans-serif; font-weight: 700;
-  font-size: 0.72rem; letter-spacing: 0.1em; text-transform: uppercase;
-  color: var(--gray); padding: 0.9rem 1.4rem;
-  border-bottom: 1px solid rgba(255,255,255,0.07); text-align: left;
-}
-.finance-table th:not(:first-child) { text-align: right; }
-.finance-table td {
-  padding: 1.1rem 1.4rem;
-  border-bottom: 1px solid rgba(255,255,255,0.04);
-  font-size: 0.9rem;
-}
-.finance-table td:not(:first-child) { text-align: right; font-family: 'Syne', sans-serif; font-weight: 600; }
-.finance-table tr:hover td { background: rgba(255,255,255,0.02); }
-.finance-table .highlight td { background: rgba(218,41,28,0.06); }
-.finance-table .total-row td {
-  border-top: 1px solid rgba(241,110,0,0.3);
-  font-family: 'Syne', sans-serif; font-weight: 800; font-size: 1rem;
-  padding-top: 1.4rem;
-}
-.up { color: var(--te-green); }
-.fin-cards { display: grid; grid-template-columns: repeat(3,1fr); gap: 1.2rem; }
-.fin-card { background: var(--navy-card); border: 1px solid rgba(255,255,255,0.06); border-radius: var(--radius); padding: 1.6rem; }
-.fin-card-title { font-size: 0.7rem; letter-spacing: 0.1em; text-transform: uppercase; color: var(--te-orange); margin-bottom: 1.2rem; }
-.fin-row { display: flex; justify-content: space-between; align-items: center; padding: 0.55rem 0; border-bottom: 1px solid rgba(255,255,255,0.04); }
-.fin-row:last-child { border-bottom: none; padding-top: 0.8rem; }
-.fin-label { font-size: 0.82rem; color: var(--gray); }
-.fin-val { font-family: 'Syne', sans-serif; font-weight: 700; font-size: 0.88rem; color: var(--white); }
-.fin-val.gold { color: var(--gold); }
-.fin-val.green { color: var(--te-green); }
-
-/* ─── ROADMAP ─── */
-.roadmap-section { background: var(--navy); }
-.roadmap-phases { display: grid; grid-template-columns: repeat(4, 1fr); gap: 1px; background: rgba(255,255,255,0.05); border-radius: var(--radius); overflow: hidden; border: 1px solid rgba(255,255,255,0.05); }
-.phase-card { background: var(--navy-card); padding: 2.2rem 1.8rem; position: relative; overflow: hidden; transition: background 0.3s; }
-.phase-card:hover { background: var(--navy-light); }
-.phase-num {
-  font-family: 'Syne', sans-serif; font-weight: 800;
-  font-size: 6rem; line-height: 1;
-  color: rgba(255,255,255,0.03);
-  position: absolute; right: 0.5rem; bottom: -0.5rem;
-  letter-spacing: -0.06em; pointer-events: none;
-}
-.phase-tag { font-size: 0.67rem; letter-spacing: 0.1em; text-transform: uppercase; color: var(--te-orange); margin-bottom: 0.7rem; display: block; }
-.phase-title { font-family: 'Syne', sans-serif; font-weight: 800; font-size: 1.15rem; margin-bottom: 0.3rem; }
-.phase-period { font-size: 0.78rem; color: var(--gray); margin-bottom: 1.5rem; }
-.phase-items { list-style: none; }
-.phase-items li {
-  font-size: 0.82rem; color: var(--gray); padding: 0.4rem 0;
-  border-bottom: 1px solid rgba(255,255,255,0.04);
-  display: flex; align-items: flex-start; gap: 0.5rem; line-height: 1.45;
-}
-.phase-items li::before { content: '→'; color: var(--te-orange); flex-shrink: 0; font-size: 0.7rem; margin-top: 0.15rem; }
-.phase-budget { margin-top: 1.5rem; padding-top: 1rem; border-top: 1px solid rgba(255,255,255,0.06); font-family: 'Syne', sans-serif; font-weight: 800; font-size: 1.1rem; color: var(--gold); }
-.phase-budget span { font-size: 0.68rem; font-weight: 400; color: var(--gray); font-family: 'Plus Jakarta Sans', sans-serif; display: block; margin-top: 0.15rem; }
-
-/* ─── PLAY OBJECTIVES ─── */
-.play-section { background: var(--navy-mid); }
-.play-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 1px; background: rgba(255,255,255,0.04); border-radius: var(--radius); overflow: hidden; border: 1px solid rgba(255,255,255,0.04); }
-.play-card {
-  background: var(--navy-card); padding: 1.4rem;
-  border-left: 2px solid transparent;
-  transition: all 0.2s; cursor: default;
-}
-.play-card:hover { background: var(--navy-light); border-left-color: var(--te-orange); }
-.play-idx {
-  font-family: 'Syne', sans-serif; font-weight: 800;
-  font-size: 1.8rem; color: rgba(255,255,255,0.06);
-  line-height: 1; margin-bottom: 0.7rem;
-}
-.play-name { font-family: 'Syne', sans-serif; font-weight: 700; font-size: 0.85rem; margin-bottom: 0.35rem; }
-.play-desc { font-size: 0.75rem; color: var(--gray); line-height: 1.5; }
-.play-seg { margin-top: 0.7rem; font-size: 0.65rem; letter-spacing: 0.1em; text-transform: uppercase; font-weight: 600; }
-.play-seg.b2c { color: var(--te-blue); }
-.play-seg.b2b { color: var(--gold); }
-
-/* ─── TECH ─── */
-.tech-section { background: var(--navy); }
-.tech-cols { display: grid; grid-template-columns: 1fr 1fr; gap: 4rem; align-items: start; }
-.tech-group { margin-bottom: 1.8rem; }
-.tech-group-title { font-size: 0.68rem; letter-spacing: 0.12em; text-transform: uppercase; color: var(--te-orange); margin-bottom: 0.9rem; }
-.tech-items { display: flex; flex-wrap: wrap; gap: 0.5rem; }
-.tech-chip {
-  background: rgba(255,255,255,0.04);
-  border: 1px solid rgba(255,255,255,0.07);
-  border-radius: 100px; padding: 0.4rem 0.9rem;
-  font-size: 0.8rem; color: var(--white);
-  transition: border-color 0.2s, background 0.2s, transform 0.2s;
-}
-.tech-chip:hover { border-color: rgba(241,110,0,0.4); background: rgba(241,110,0,0.06); transform: translateY(-1px); }
-.arch-diagram { background: var(--navy-card); border: 1px solid rgba(255,255,255,0.07); border-radius: var(--radius); padding: 1.8rem; }
-.arch-layer {
-  background: rgba(255,255,255,0.03);
-  border: 1px solid rgba(255,255,255,0.06);
-  border-radius: var(--radius-sm); padding: 0.9rem 1.2rem;
-  margin-bottom: 0.5rem; display: flex; align-items: center; gap: 1rem;
-  transition: border-color 0.2s;
-}
-.arch-layer:hover { border-color: rgba(241,110,0,0.25); }
-.arch-layer-icon { font-size: 1.2rem; flex-shrink: 0; }
-.arch-layer-name { font-family: 'Syne', sans-serif; font-weight: 700; font-size: 0.82rem; }
-.arch-layer-desc { font-size: 0.72rem; color: var(--gray); }
-.arch-arrow { text-align: center; color: rgba(241,110,0,0.5); font-size: 0.85rem; margin: -0.2rem 0; display: block; }
-
-/* ─── TEAM ─── */
-.team-section { background: var(--navy-mid); }
-.team-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 1.2rem; }
-.team-card {
-  background: var(--navy-card);
-  border: 1px solid rgba(255,255,255,0.06);
-  border-radius: var(--radius); padding: 1.8rem;
-  transition: border-color 0.3s, transform 0.3s;
-}
-.team-card:hover { border-color: rgba(241,110,0,0.3); transform: translateY(-4px); }
-.team-avatar {
-  width: 52px; height: 52px; border-radius: 50%;
-  background: var(--spectrum);
-  display: flex; align-items: center; justify-content: center;
-  font-family: 'Syne', sans-serif; font-weight: 800;
-  font-size: 0.88rem; margin-bottom: 1rem; color: white;
-}
-.team-role { font-size: 0.67rem; letter-spacing: 0.1em; text-transform: uppercase; color: var(--te-orange); margin-bottom: 0.3rem; }
-.team-title { font-family: 'Syne', sans-serif; font-weight: 700; font-size: 0.92rem; margin-bottom: 0.4rem; }
-.team-salary { font-size: 0.78rem; color: var(--gold); margin-bottom: 0.9rem; }
-.team-skills { display: flex; flex-wrap: wrap; gap: 0.35rem; }
-.team-skill { font-size: 0.65rem; background: rgba(255,255,255,0.04); border: 1px solid rgba(255,255,255,0.07); padding: 0.18rem 0.45rem; border-radius: 100px; color: var(--gray); }
-
-/* ─── FRANCHISÉS ─── */
-.franchise-section { background: var(--navy-mid); }
-.franchise-intro {
-  display: grid; grid-template-columns: 1fr 1fr; gap: 4rem; align-items: start; margin-bottom: 4rem;
-}
-.franchise-desc { font-size: 1rem; font-weight: 300; color: var(--gray); line-height: 1.8; }
-.franchise-desc strong { color: var(--white); font-weight: 500; }
-.franchise-highlight {
-  background: var(--navy-card); border: 1px solid rgba(241,110,0,0.2);
-  border-radius: var(--radius); padding: 2rem;
-  border-left: 3px solid var(--te-orange);
-}
-.franchise-highlight-title {
-  font-family: 'Syne', sans-serif; font-weight: 800; font-size: 1rem;
-  color: var(--te-orange); margin-bottom: 1rem;
-}
-.franchise-highlight p { font-size: 0.88rem; color: var(--gray); line-height: 1.7; }
-.franchise-highlight p + p { margin-top: 0.8rem; }
-
-.franchise-grid {
-  display: grid; grid-template-columns: repeat(3, 1fr);
-  gap: 1px; background: rgba(255,255,255,0.05);
-  border-radius: var(--radius); overflow: hidden;
-  border: 1px solid rgba(255,255,255,0.05); margin-bottom: 3rem;
-}
-.franchise-card {
-  background: var(--navy-card); padding: 2.2rem;
-  position: relative; overflow: hidden; transition: background 0.3s;
-}
-.franchise-card:hover { background: var(--navy-light); }
-.franchise-card::after {
-  content: ''; position: absolute; bottom: 0; left: 0; right: 0; height: 2px;
-  background: var(--spectrum);
-  transform: scaleX(0); transition: transform 0.4s; transform-origin: left;
-}
-.franchise-card:hover::after { transform: scaleX(1); }
-.fc-icon { font-size: 2rem; margin-bottom: 1.2rem; display: block; }
-.fc-title { font-family: 'Syne', sans-serif; font-weight: 700; font-size: 1rem; margin-bottom: 0.7rem; }
-.fc-desc { font-size: 0.875rem; color: var(--gray); line-height: 1.65; }
-.fc-tags { margin-top: 1.2rem; display: flex; gap: 0.4rem; flex-wrap: wrap; }
-.fc-tag {
-  font-size: 0.67rem; letter-spacing: 0.07em; text-transform: uppercase;
-  background: rgba(241,110,0,0.08); color: var(--te-orange);
-  border: 1px solid rgba(241,110,0,0.2); padding: 0.22rem 0.55rem;
-  border-radius: 100px;
-}
-
-/* Dashboard franchisé mockup */
-.franchise-dashboard {
-  background: var(--navy-card); border: 1px solid rgba(241,110,0,0.15);
-  border-radius: var(--radius); overflow: hidden;
-}
-.fd-header {
-  background: rgba(241,110,0,0.07); border-bottom: 1px solid rgba(241,110,0,0.12);
-  padding: 1.2rem 2rem; display: flex; justify-content: space-between; align-items: center;
-}
-.fd-header-title { font-family: 'Syne', sans-serif; font-weight: 700; font-size: 0.9rem; color: var(--te-orange); }
-.fd-header-badge {
-  font-size: 0.65rem; letter-spacing: 0.1em; text-transform: uppercase;
-  background: rgba(80,190,135,0.1); color: var(--te-green);
-  border: 1px solid rgba(80,190,135,0.2); padding: 0.2rem 0.6rem; border-radius: 100px;
-}
-.fd-body { padding: 2rem; }
-.fd-kpis { display: grid; grid-template-columns: repeat(4, 1fr); gap: 1rem; margin-bottom: 2rem; }
-.fd-kpi {
-  background: rgba(255,255,255,0.03); border: 1px solid rgba(255,255,255,0.06);
-  border-radius: var(--radius-sm); padding: 1.2rem; text-align: center;
-}
-.fd-kpi-val {
-  font-family: 'Syne', sans-serif; font-weight: 800; font-size: 1.5rem;
-  letter-spacing: -0.04em; color: var(--white); line-height: 1;
-}
-.fd-kpi-val .ku { font-size: 0.85rem; color: var(--te-orange); }
-.fd-kpi-label { font-size: 0.68rem; color: var(--gray); margin-top: 0.3rem; letter-spacing: 0.04em; text-transform: uppercase; }
-.fd-table { width: 100%; border-collapse: collapse; }
-.fd-table th {
-  font-size: 0.68rem; letter-spacing: 0.1em; text-transform: uppercase;
-  color: var(--gray); padding: 0.7rem 0.8rem; border-bottom: 1px solid rgba(255,255,255,0.06);
-  text-align: left;
-}
-.fd-table td {
-  font-size: 0.82rem; padding: 0.85rem 0.8rem;
-  border-bottom: 1px solid rgba(255,255,255,0.03); color: var(--gray);
-}
-.fd-table td:first-child { color: var(--white); font-weight: 500; }
-.fd-table td.positive { color: var(--te-green); font-family: 'Syne', sans-serif; font-weight: 700; }
-.fd-table td.pending { color: var(--te-orange); font-family: 'Syne', sans-serif; font-weight: 700; }
-.fd-table tr:hover td { background: rgba(255,255,255,0.02); }
-
-/* Flow diagram */
-.revenue-flow {
-  display: flex; align-items: center; justify-content: center;
-  gap: 0; flex-wrap: wrap; margin-top: 3rem;
-}
-.flow-node {
-  background: var(--navy-card); border: 1px solid rgba(255,255,255,0.07);
-  border-radius: var(--radius); padding: 1.2rem 1.6rem; text-align: center;
-  min-width: 150px; transition: border-color 0.3s;
-}
-.flow-node:hover { border-color: rgba(241,110,0,0.3); }
-.flow-node-icon { font-size: 1.5rem; margin-bottom: 0.5rem; }
-.flow-node-label { font-family: 'Syne', sans-serif; font-weight: 700; font-size: 0.8rem; }
-.flow-node-sub { font-size: 0.7rem; color: var(--gray); margin-top: 0.2rem; }
-.flow-arrow {
-  font-size: 1.2rem; color: var(--te-orange); padding: 0 0.5rem;
-  display: flex; align-items: center; flex-direction: column; gap: 0.2rem;
-}
-.flow-arrow-label { font-size: 0.65rem; color: var(--te-orange); letter-spacing: 0.05em; white-space: nowrap; }
-.flow-node.highlighted { border-color: rgba(241,110,0,0.4); background: rgba(241,110,0,0.05); }
-
-/* ─── CTA ─── */
-.cta-section {
-  padding: 7rem 5rem; text-align: center; position: relative; overflow: hidden;
-  background: linear-gradient(150deg, #0f0500 0%, #0a0d0f 40%, #07111F 100%);
-}
-.cta-section::before {
-  content: ''; position: absolute; inset: 0;
-  background:
-    radial-gradient(ellipse 60% 70% at 50% 50%, rgba(241,110,0,0.1) 0%, transparent 60%),
-    radial-gradient(ellipse 30% 40% at 80% 30%, rgba(8,94,189,0.06) 0%, transparent 50%);
-}
-.cta-section::after {
-  content: ''; position: absolute; bottom: 0; left: 0; right: 0; height: 3px;
-  background: var(--spectrum);
-}
-.cta-content { position: relative; z-index: 1; }
-.cta-title {
-  font-family: 'Syne', sans-serif; font-weight: 800;
-  font-size: clamp(2.5rem, 5vw, 4.2rem); letter-spacing: -0.05em;
-  margin-bottom: 1.2rem; line-height: 0.95;
-}
-.cta-title span { color: var(--te-orange); }
-.cta-sub { font-size: 1rem; font-weight: 300; margin-bottom: 2.8rem; color: rgba(244,246,248,0.6); }
-.btn-white {
-  background: var(--white); color: var(--navy);
-  padding: 1rem 2.4rem; border: none; border-radius: var(--radius-sm);
-  font-family: 'Syne', sans-serif; font-weight: 800;
-  font-size: 0.85rem; letter-spacing: 0.07em; text-transform: uppercase;
-  cursor: pointer; transition: all 0.25s;
-}
-.btn-white:hover { transform: translateY(-3px); box-shadow: 0 16px 40px rgba(0,0,0,0.4); }
-
-/* ─── FOOTER ─── */
-footer {
-  background: #040c17;
-  padding: 2.5rem 5rem;
-  display: flex; justify-content: space-between; align-items: center;
-  border-top: 1px solid rgba(255,255,255,0.05);
-  position: relative;
-}
-footer::before {
-  content: ''; position: absolute; top: 0; left: 0; right: 0; height: 2px;
-  background: var(--spectrum);
-}
-.footer-logo { font-family: 'Syne', sans-serif; font-weight: 800; font-size: 1.15rem; color: var(--white); }
-.footer-logo .bp { color: var(--te-orange); }
-.footer-logo .sep { color: rgba(255,255,255,0.2); }
-.footer-logo .te { color: var(--te-red); }
-.footer-info { font-size: 0.75rem; color: var(--gray); }
-.footer-meta { font-size: 0.72rem; color: rgba(255,255,255,0.2); text-align: right; line-height: 1.6; }
-
-/* ─── SCROLL REVEAL ─── */
-.reveal { opacity: 0; transform: translateY(24px); transition: opacity 0.75s ease, transform 0.75s ease; }
-.reveal.visible { opacity: 1; transform: translateY(0); }
-
-/* ─── IDEAS GRID ─── */
-.ideas-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 1.5rem; }
-
-/* ─── RESPONSIVE ─── */
-@media (max-width: 1200px) {
-  nav { padding: 1rem 2.5rem; }
-  .nav-links { display: none; }
-  section { padding: 5rem 2.5rem; }
-  .hero { padding: 8rem 2.5rem 4rem; flex-direction: column; }
-  .hero-stats { position: static; transform: none; flex-direction: row; flex-wrap: wrap; margin-top: 3rem; gap: 0.8rem; }
-  .stat-card { min-width: calc(50% - 0.4rem); flex: 1; }
-  .metrics-bar { padding: 0 2.5rem; grid-template-columns: repeat(2, 1fr); }
-  .metric-item:nth-child(2)::after { display: none; }
-  .steps-flow { grid-template-columns: repeat(3, 1fr); gap: 2rem; }
-  .steps-connector { display: none; }
-  .features-grid { grid-template-columns: repeat(2, 1fr); }
-  .petro-grid { grid-template-columns: 1fr; }
-  .station-map-grid { grid-template-columns: repeat(2, 1fr); }
-  .roadmap-phases { grid-template-columns: repeat(2, 1fr); }
-  .play-grid { grid-template-columns: repeat(2, 1fr); }
-  .chart-panel.active { grid-template-columns: 1fr; }
-  .tech-cols { grid-template-columns: 1fr; gap: 2.5rem; }
-  .team-grid { grid-template-columns: repeat(2, 1fr); }
-  .fin-cards { grid-template-columns: 1fr; }
-  .ideas-grid { grid-template-columns: 1fr; }
-  .franchise-intro { grid-template-columns: 1fr; gap: 2rem; }
-  .franchise-grid { grid-template-columns: repeat(2, 1fr); }
-  .fd-kpis { grid-template-columns: repeat(2, 1fr); }
-  .revenue-flow { gap: 0.5rem; }
-  .flow-arrow { display: none; }
-  footer { flex-direction: column; gap: 1rem; text-align: center; }
-  .footer-meta { text-align: center; }
-  .cta-section { padding: 5rem 2.5rem; }
-}
-
-@media (max-width: 640px) {
-  nav { padding: 0.9rem 1.5rem; }
-  section { padding: 4rem 1.5rem; }
-  .hero { padding: 7rem 1.5rem 3rem; }
-  .hero-title { font-size: 2.6rem; }
-  .hero-sub { font-size: 0.95rem; }
-  .hero-stats { flex-direction: column; }
-  .stat-card { min-width: 100%; }
-  .metrics-bar { padding: 0 1.5rem; grid-template-columns: 1fr 1fr; }
-  .metric-item::after { display: none !important; }
-  .metric-num { font-size: 2rem; }
-  .steps-flow { grid-template-columns: 1fr 1fr; gap: 1.5rem; }
-  .features-grid, .roadmap-phases { grid-template-columns: 1fr; }
-  .play-grid { grid-template-columns: 1fr 1fr; }
-  .team-grid { grid-template-columns: 1fr; }
-  .station-map-grid { grid-template-columns: 1fr; }
-  footer { padding: 2rem 1.5rem; }
-  .cta-section { padding: 4rem 1.5rem; }
-  .charts-tabs { flex-wrap: wrap; }
-  .tab-btn { font-size: 0.7rem; padding: 0.5rem 1rem; }
-  .franchise-grid { grid-template-columns: 1fr; }
-}
-</style>
-</head>
-<body>
-
-<nav>
-  <a href="#" class="nav-logo">
-    <div class="nav-pulse"></div>
-    <span class="logo-bp">BarkaPay</span>
-    <span class="logo-sep">×</span>
-    <span class="logo-te">TotalEnergies</span>
-  </a>
-
-  <ul class="nav-links">
-    <li><a href="#concept">Concept</a></li>
-    <li><a href="#avantage">Avantage Pétrolier</a></li>
-    <li><a href="#fonctionnalites">Fonctions</a></li>
-    <li><a href="#finances">Finances</a></li>
-    <li><a href="#roadmap">Roadmap</a></li>
-  </ul>
-
-  <button class="nav-cta" onclick="document.getElementById('cta').scrollIntoView({behavior:'smooth'})">
-    Engager le Partenariat →
-  </button>
-  
-  <div class="nav-spectrum-bar"></div>
-</nav>
-
-<section class="hero">
-  <div class="hero-bg"></div>
-  <div class="hero-grid"></div>
-  <div class="hero-content">
-    <div class="hero-partner-badge">
-       <span class="partner-pill">Fintech</span>
-       <span class="partner-x">+</span>
-       <span class="partner-pill te">Énergie</span>
-    </div>
-    
-    <h1 class="hero-title">
-      Digitalisons ensemble<br>
-      <span class="accent-orange">le Burkina Faso</span>
-      <span class="dim">avec TotalEnergies.</span>
-    </h1>
-    
-    <p class="hero-sub">
-      L'alliance technologique qui transforme chaque station en un point de paiement intelligent. <strong>Zéro cash, 100% sécurité.</strong>
-    </p>
-
-    <div class="hero-actions">
-      <a href="#avantage" class="btn-primary">Le Projet Pétrolier →</a>
-      <a href="#finances" class="btn-outline">Projections 2026</a>
-    </div>
-  </div>
-  </section>
-
-<!-- HERO -->
-<section class="hero">
-  <div class="hero-bg"></div>
-  <div class="hero-grid"></div>
-  <div class="hero-spectrum"></div>
-  <div class="hero-content">
-    <div class="hero-partner-badge">
-      <span class="partner-pill">BarkaPay</span>
-      <span class="partner-x">×</span>
-      <span class="partner-pill te">TotalEnergies Burkina Faso</span>
-    </div>
-    <div class="hero-badge"><span class="badge-dot"></span> Présentation Partenariat Stratégique · 2026</div>
-    <h1 class="hero-title">
-      Digitaliser les<br>
-      <span class="accent-orange">stations-service</span>
-      <span class="dim">du Burkina Faso.</span>
-    </h1>
-    <p class="hero-sub">
-      BarkaPay transforme les stations TotalEnergies de <strong>Ouagadougou et Bobo-Dioulasso</strong> en hubs digitaux — paiement sans espèces, traçabilité des flux, sécurité des pompistes, et intelligence client unifiée pour le réseau Total.
-    </p>
-    <div class="hero-actions">
-      <a href="#avantage" class="btn-primary">Avantage TotalEnergies →</a>
-      <a href="#concept" class="btn-outline">Voir le Concept</a>
-    </div>
-  </div>
-  <div class="hero-stats">
-    <div class="stat-card">
-      <div class="stat-val">462<span class="unit">Mds</span></div>
-      <div class="stat-label">Revenus An.3 (FCFA)</div>
-      <div class="stat-growth">↑ +173% vs Année 2</div>
-    </div>
-    <div class="stat-card">
-      <div class="stat-val">500<span class="unit">K</span></div>
-      <div class="stat-label">Utilisateurs Année 1</div>
-      <div class="stat-growth">↑ 5K → 500K en 12 mois</div>
-    </div>
-    <div class="stat-card">
-      <div class="stat-val">3826<span class="unit">%</span></div>
-      <div class="stat-label">ROI Année 1</div>
-      <div class="stat-growth">↑ Rentable dès Année 1</div>
-    </div>
-  </div>
-</section>
-
-<!-- METRICS BAR -->
-<div class="metrics-bar">
-  <div class="metric-item"><div class="metric-num">40.6<span class="unit">Mds</span></div><div class="metric-desc">Revenus An.1 (FCFA)</div></div>
-  <div class="metric-item"><div class="metric-num">97.4<span class="unit">%</span></div><div class="metric-desc">Marge Brute</div></div>
-  <div class="metric-item"><div class="metric-num">25<span class="unit">M</span></div><div class="metric-desc">Transactions/mois An.3</div></div>
-  <div class="metric-item"><div class="metric-num">97.3<span class="unit">M</span></div><div class="metric-desc">Budget MVP (FCFA)</div></div>
-</div>
-
-<!-- HOW IT WORKS -->
-<section id="concept" class="how-section">
-  <span class="section-label">Comment ça marche</span>
-  <h2 class="section-title">6 étapes. Moins de 30 secondes.</h2>
-  <p class="section-sub">Du téléchargement au paiement, BarkaPay supprime toute friction dans les stations TotalEnergies. Aucune espèce. Aucune carte physique. Juste un QR code.</p>
-  <div class="steps-flow reveal">
-    <div class="steps-connector"></div>
-    <div class="step-item"><div class="step-num"><span>📱</span><div class="step-count">1</div></div><div class="step-title">Inscription</div><div class="step-desc">Numéro de téléphone, vérification OTP rapide</div></div>
-    <div class="step-item"><div class="step-num"><span>💳</span><div class="step-count">2</div></div><div class="step-title">Recharge</div><div class="step-desc">Orange Money, Moov, MTN, Visa/Mastercard</div></div>
-    <div class="step-item"><div class="step-num"><span>⛽</span><div class="step-count">3</div></div><div class="step-title">À la station Total</div><div class="step-desc">Sélectionner pompe et type de carburant</div></div>
-    <div class="step-item"><div class="step-num"><span>📲</span><div class="step-count">4</div></div><div class="step-title">QR Code</div><div class="step-desc">Génération instantanée d'un QR dynamique unique</div></div>
-    <div class="step-item"><div class="step-num"><span>🔍</span><div class="step-count">5</div></div><div class="step-title">Scan pompiste</div><div class="step-desc">App dédiée pompiste, saisie du montant</div></div>
-    <div class="step-item"><div class="step-num"><span>✅</span><div class="step-count">6</div></div><div class="step-title">Confirmation</div><div class="step-desc">Débit instantané + notification + reçu</div></div>
-  </div>
-</section>
-
-<!-- ═══ AVANTAGE PÉTROLIER (nouvelle section) ═══ -->
-<section id="avantage" class="petro-section">
-  <span class="section-label">Avantage Pétrolier</span>
-  <h2 class="section-title">Ce que BarkaPay apporte<br>au réseau <span style="color:var(--te-red)">TotalEnergies</span>.</h2>
-  <p class="section-sub">Au-delà du paiement digital : une transformation opérationnelle pour les stations de Ouagadougou et Bobo-Dioulasso — sécurité, trésorerie, et intelligence client unifiée.</p>
-
-  <div class="petro-grid reveal">
-
-    <!-- Card 1: Sécurité pompistes -->
-    <div class="petro-card">
-      <span class="petro-icon">🛡️</span>
-      <div class="petro-title">Zéro Cash en Station — <span>Sécurité des Pompistes</span></div>
-      <div class="petro-desc">
-        La manipulation d'espèces expose les pompistes aux vols, aux erreurs de caisse et aux conflits clients. Avec BarkaPay, <strong>chaque transaction est 100% digitale</strong> : le pompiste ne touche plus d'argent physique.
-        <br><br>
-        Résultat : <strong>fin des vols de caisse</strong>, réduction des incidents de fin de journée, meilleur climat de travail et fidélisation du personnel. TotalEnergies Burkina améliore directement la sécurité opérationnelle de son réseau sans investissement infrastructure.
-      </div>
-      <div class="petro-kpis">
-        <div class="petro-kpi">
-          <div class="petro-kpi-val">-85%</div>
-          <div class="petro-kpi-label">Incidents caisse</div>
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>BarkaPay × TotalEnergies</title>
+    <link
+      href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=DM+Sans:ital,opsz,wght@0,9..40,300;0,9..40,400;0,9..40,500;1,9..40,300&display=swap"
+      rel="stylesheet"
+    />
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.0/chart.umd.min.js"></script>
+    <style>
+      :root {
+        --obsidian: #0b0b0d;
+        --obsidian-2: #111114;
+        --obsidian-3: #16161a;
+        --red: #da291c;
+        --red-dim: rgba(218, 41, 28, 0.12);
+        --gold: #c9a84c;
+        --gold-light: #e8c97a;
+        --gold-dim: rgba(201, 168, 76, 0.12);
+        --white: #f0ece6;
+        --muted: #6b6760;
+        --line: rgba(240, 236, 230, 0.06);
+      }
+
+      *,
+      *::before,
+      *::after {
+        box-sizing: border-box;
+        margin: 0;
+        padding: 0;
+      }
+      html {
+        scroll-behavior: smooth;
+      }
+
+      body {
+        font-family: "DM Sans", sans-serif;
+        background: var(--obsidian);
+        color: var(--white);
+        overflow-x: hidden;
+        cursor: default;
+      }
+
+      /* ── CURSOR ── */
+      .cursor {
+        width: 6px;
+        height: 6px;
+        border-radius: 50%;
+        background: var(--gold);
+        position: fixed;
+        top: 0;
+        left: 0;
+        z-index: 9999;
+        pointer-events: none;
+        transform: translate(-50%, -50%);
+        transition:
+          width 0.25s,
+          height 0.25s,
+          opacity 0.25s;
+        mix-blend-mode: difference;
+      }
+      .cursor-ring {
+        width: 32px;
+        height: 32px;
+        border-radius: 50%;
+        border: 1px solid rgba(201, 168, 76, 0.5);
+        position: fixed;
+        top: 0;
+        left: 0;
+        z-index: 9998;
+        pointer-events: none;
+        transform: translate(-50%, -50%);
+        transition:
+          transform 0.1s linear,
+          width 0.3s,
+          height 0.3s,
+          border-color 0.3s;
+      }
+
+      /* ── SCROLLBAR ── */
+      ::-webkit-scrollbar {
+        width: 3px;
+      }
+      ::-webkit-scrollbar-track {
+        background: var(--obsidian);
+      }
+      ::-webkit-scrollbar-thumb {
+        background: var(--red);
+        border-radius: 2px;
+      }
+
+      /* ── NAV ── */
+      nav {
+        position: fixed;
+        top: 0;
+        left: 0;
+        right: 0;
+        z-index: 100;
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        padding: 1.4rem 5vw;
+        background: rgba(11, 11, 13, 0.85);
+        backdrop-filter: blur(20px);
+        border-bottom: 1px solid var(--line);
+      }
+      .nav-logo {
+        font-family: "Bebas Neue", sans-serif;
+        font-size: 1.3rem;
+        letter-spacing: 0.12em;
+        color: var(--white);
+        text-decoration: none;
+        display: flex;
+        align-items: center;
+        gap: 0.5rem;
+      }
+      .nav-logo em {
+        color: var(--red);
+        font-style: normal;
+      }
+      .nav-logo span {
+        color: var(--gold);
+        font-size: 1rem;
+      }
+      .nav-cta {
+        background: var(--red);
+        color: var(--white);
+        border: none;
+        padding: 0.6rem 1.6rem;
+        font-family: "DM Sans", sans-serif;
+        font-weight: 500;
+        font-size: 0.82rem;
+        letter-spacing: 0.08em;
+        text-transform: uppercase;
+        cursor: pointer;
+        clip-path: polygon(8px 0%, 100% 0%, calc(100% - 8px) 100%, 0% 100%);
+        transition:
+          background 0.2s,
+          transform 0.2s;
+      }
+      .nav-cta:hover {
+        background: #b52015;
+        transform: translateY(-1px);
+      }
+
+      /* ── HERO ── */
+      .hero {
+        min-height: 100vh;
+        display: flex;
+        align-items: center;
+        padding: 8rem 5vw 5rem;
+        position: relative;
+        overflow: hidden;
+      }
+      .hero-bg-line {
+        position: absolute;
+        top: 0;
+        bottom: 0;
+        width: 1px;
+        background: var(--line);
+        animation: lineSlide 1.2s ease both;
+      }
+      @keyframes lineSlide {
+        from {
+          opacity: 0;
+          transform: scaleY(0);
+        }
+        to {
+          opacity: 1;
+          transform: scaleY(1);
+        }
+      }
+      .hero-bg-line:nth-child(1) {
+        left: 20vw;
+        animation-delay: 0.1s;
+      }
+      .hero-bg-line:nth-child(2) {
+        left: 40vw;
+        animation-delay: 0.2s;
+      }
+      .hero-bg-line:nth-child(3) {
+        left: 60vw;
+        animation-delay: 0.3s;
+      }
+      .hero-bg-line:nth-child(4) {
+        left: 80vw;
+        animation-delay: 0.4s;
+      }
+
+      .hero-glow {
+        position: absolute;
+        width: 600px;
+        height: 600px;
+        border-radius: 50%;
+        background: radial-gradient(
+          circle,
+          rgba(218, 41, 28, 0.15) 0%,
+          transparent 70%
+        );
+        right: -100px;
+        top: 50%;
+        transform: translateY(-50%);
+        animation: glowPulse 4s ease-in-out infinite;
+      }
+      @keyframes glowPulse {
+        0%,
+        100% {
+          opacity: 0.6;
+        }
+        50% {
+          opacity: 1;
+        }
+      }
+
+      .hero-content {
+        position: relative;
+        z-index: 1;
+        max-width: 760px;
+      }
+
+      .hero-eyebrow {
+        display: flex;
+        align-items: center;
+        gap: 1rem;
+        margin-bottom: 2rem;
+        animation: fadeUp 0.8s ease both;
+      }
+      .eyebrow-line {
+        width: 40px;
+        height: 1px;
+        background: var(--red);
+      }
+      .eyebrow-text {
+        font-size: 0.72rem;
+        letter-spacing: 0.2em;
+        text-transform: uppercase;
+        color: var(--gold);
+        font-weight: 400;
+      }
+
+      .hero-title {
+        font-family: "Bebas Neue", sans-serif;
+        font-size: clamp(4.5rem, 12vw, 9rem);
+        line-height: 0.88;
+        letter-spacing: 0.04em;
+        margin-bottom: 2rem;
+      }
+      .hero-title .line {
+        display: block;
+        overflow: hidden;
+      }
+      .hero-title .line span {
+        display: block;
+        animation: titleReveal 0.9s cubic-bezier(0.16, 1, 0.3, 1) both;
+      }
+      .hero-title .line:nth-child(1) span {
+        animation-delay: 0.15s;
+      }
+      .hero-title .line:nth-child(2) span {
+        animation-delay: 0.25s;
+        color: var(--red);
+      }
+      .hero-title .line:nth-child(3) span {
+        animation-delay: 0.35s;
+        color: var(--gold);
+        font-size: 0.65em;
+      }
+      @keyframes titleReveal {
+        from {
+          transform: translateY(110%);
+        }
+        to {
+          transform: translateY(0);
+        }
+      }
+
+      .hero-sub {
+        font-size: 1.05rem;
+        font-weight: 300;
+        line-height: 1.8;
+        color: var(--muted);
+        max-width: 480px;
+        margin-bottom: 3rem;
+        animation: fadeUp 0.8s 0.5s ease both;
+      }
+      .hero-sub strong {
+        color: var(--white);
+        font-weight: 400;
+      }
+
+      .hero-actions {
+        display: flex;
+        gap: 1rem;
+        animation: fadeUp 0.8s 0.6s ease both;
+      }
+      .btn-red {
+        background: var(--red);
+        color: var(--white);
+        padding: 0.9rem 2rem;
+        border: none;
+        font-family: "DM Sans", sans-serif;
+        font-weight: 500;
+        font-size: 0.82rem;
+        letter-spacing: 0.1em;
+        text-transform: uppercase;
+        cursor: pointer;
+        clip-path: polygon(8px 0%, 100% 0%, calc(100% - 8px) 100%, 0% 100%);
+        transition: all 0.2s;
+      }
+      .btn-red:hover {
+        background: #b52015;
+        transform: translateY(-2px);
+      }
+      .btn-ghost {
+        background: transparent;
+        color: var(--gold);
+        padding: 0.9rem 2rem;
+        border: 1px solid rgba(201, 168, 76, 0.3);
+        font-family: "DM Sans", sans-serif;
+        font-weight: 400;
+        font-size: 0.82rem;
+        letter-spacing: 0.1em;
+        text-transform: uppercase;
+        cursor: pointer;
+        transition: all 0.2s;
+      }
+      .btn-ghost:hover {
+        border-color: var(--gold);
+        background: var(--gold-dim);
+      }
+
+      /* floating stats */
+      .hero-stats {
+        position: absolute;
+        right: 5vw;
+        top: 50%;
+        transform: translateY(-50%);
+        display: flex;
+        flex-direction: column;
+        gap: 1px;
+        z-index: 1;
+        animation: fadeLeft 1s 0.7s ease both;
+      }
+      @keyframes fadeLeft {
+        from {
+          opacity: 0;
+          transform: translate(30px, -50%);
+        }
+        to {
+          opacity: 1;
+          transform: translate(0, -50%);
+        }
+      }
+      .hstat {
+        background: var(--obsidian-2);
+        border: 1px solid var(--line);
+        padding: 1.4rem 2rem;
+        min-width: 200px;
+        position: relative;
+        border-left: 2px solid var(--red);
+        transition:
+          border-left-color 0.2s,
+          background 0.2s;
+      }
+      .hstat:hover {
+        background: var(--obsidian-3);
+        border-left-color: var(--gold);
+      }
+      .hstat-val {
+        font-family: "Bebas Neue", sans-serif;
+        font-size: 2.4rem;
+        letter-spacing: 0.06em;
+        line-height: 1;
+        color: var(--white);
+      }
+      .hstat-val em {
+        color: var(--gold);
+        font-style: normal;
+        font-size: 1.2rem;
+      }
+      .hstat-label {
+        font-size: 0.72rem;
+        color: var(--muted);
+        letter-spacing: 0.08em;
+        text-transform: uppercase;
+        margin-top: 0.3rem;
+      }
+
+      @keyframes fadeUp {
+        from {
+          opacity: 0;
+          transform: translateY(20px);
+        }
+        to {
+          opacity: 1;
+          transform: translateY(0);
+        }
+      }
+
+      /* ── RED LINE DIVIDER ── */
+      .divider {
+        height: 1px;
+        background: linear-gradient(
+          90deg,
+          transparent,
+          var(--red),
+          transparent
+        );
+      }
+      .divider-gold {
+        height: 1px;
+        background: linear-gradient(
+          90deg,
+          transparent,
+          var(--gold),
+          transparent
+        );
+      }
+
+      /* ── SECTION BASE ── */
+      section {
+        padding: 7rem 5vw;
+        position: relative;
+      }
+      section + section {
+        border-top: 1px solid var(--line);
+      }
+
+      .s-tag {
+        font-size: 0.68rem;
+        letter-spacing: 0.2em;
+        text-transform: uppercase;
+        color: var(--red);
+        margin-bottom: 0.8rem;
+        display: flex;
+        align-items: center;
+        gap: 0.6rem;
+      }
+      .s-tag::before {
+        content: "";
+        width: 16px;
+        height: 1px;
+        background: var(--red);
+      }
+
+      .s-title {
+        font-family: "Bebas Neue", sans-serif;
+        font-size: clamp(2.5rem, 5vw, 4rem);
+        letter-spacing: 0.06em;
+        line-height: 1;
+        margin-bottom: 1rem;
+      }
+      .s-title em {
+        color: var(--gold);
+        font-style: normal;
+      }
+
+      .s-sub {
+        font-size: 0.95rem;
+        font-weight: 300;
+        color: var(--muted);
+        line-height: 1.75;
+        max-width: 560px;
+        margin-bottom: 3.5rem;
+      }
+
+      /* ── PROBLEM SECTION ── */
+      .problem-section {
+        background: var(--obsidian-2);
+      }
+      .problem-grid {
+        display: grid;
+        grid-template-columns: repeat(3, 1fr);
+        gap: 1px;
+        background: var(--line);
+        border: 1px solid var(--line);
+      }
+      .prob-card {
+        background: var(--obsidian-2);
+        padding: 2.5rem 2rem;
+        position: relative;
+        overflow: hidden;
+        transition: background 0.3s;
+      }
+      .prob-card:hover {
+        background: var(--obsidian-3);
+      }
+      .prob-card::after {
+        content: "";
+        position: absolute;
+        bottom: 0;
+        left: 0;
+        right: 0;
+        height: 2px;
+        background: var(--red);
+        transform: scaleX(0);
+        transform-origin: left;
+        transition: transform 0.4s ease;
+      }
+      .prob-card:hover::after {
+        transform: scaleX(1);
+      }
+      .prob-num {
+        font-family: "Bebas Neue", sans-serif;
+        font-size: 4rem;
+        color: rgba(218, 41, 28, 0.12);
+        line-height: 1;
+        margin-bottom: 0.8rem;
+      }
+      .prob-title {
+        font-size: 1rem;
+        font-weight: 500;
+        margin-bottom: 0.6rem;
+        color: var(--white);
+      }
+      .prob-desc {
+        font-size: 0.85rem;
+        color: var(--muted);
+        line-height: 1.7;
+      }
+
+      /* ── HOW ── */
+      .how-section {
+        background: var(--obsidian);
+      }
+      .steps {
+        display: grid;
+        grid-template-columns: repeat(6, 1fr);
+        gap: 0;
+        position: relative;
+      }
+      .step-connector {
+        position: absolute;
+        top: 36px;
+        left: calc(100% / 12);
+        right: calc(100% / 12);
+        height: 1px;
+        background: linear-gradient(90deg, var(--red), var(--gold));
+        z-index: 0;
+      }
+      .step {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        text-align: center;
+        padding: 0 0.5rem;
+        position: relative;
+        z-index: 1;
+      }
+      .step-icon {
+        width: 72px;
+        height: 72px;
+        background: var(--obsidian-2);
+        border: 1px solid var(--line);
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-size: 1.6rem;
+        margin-bottom: 1.2rem;
+        clip-path: polygon(12px 0%, 100% 0%, calc(100% - 12px) 100%, 0% 100%);
+        transition:
+          border-color 0.3s,
+          background 0.3s,
+          transform 0.3s;
+      }
+      .step:hover .step-icon {
+        border-color: var(--gold);
+        background: var(--gold-dim);
+        transform: translateY(-4px);
+      }
+      .step-title {
+        font-size: 0.82rem;
+        font-weight: 500;
+        margin-bottom: 0.3rem;
+      }
+      .step-desc {
+        font-size: 0.75rem;
+        color: var(--muted);
+        line-height: 1.5;
+      }
+
+      /* ── AVANTAGE ── */
+      .avantage-section {
+        background: var(--obsidian-2);
+      }
+      .av-grid {
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        gap: 1px;
+        background: var(--line);
+        border: 1px solid var(--line);
+      }
+      .av-card {
+        background: var(--obsidian-2);
+        padding: 2.8rem 2.5rem;
+        position: relative;
+        overflow: hidden;
+        transition: background 0.3s;
+      }
+      .av-card:hover {
+        background: #13131a;
+      }
+      .av-card::before {
+        content: "";
+        position: absolute;
+        left: 0;
+        top: 0;
+        bottom: 0;
+        width: 2px;
+        background: linear-gradient(180deg, var(--red), var(--gold));
+        transform: scaleY(0);
+        transform-origin: top;
+        transition: transform 0.4s ease;
+      }
+      .av-card:hover::before {
+        transform: scaleY(1);
+      }
+      .av-icon {
+        font-size: 2rem;
+        margin-bottom: 1.2rem;
+        display: block;
+      }
+      .av-title {
+        font-family: "Bebas Neue", sans-serif;
+        font-size: 1.4rem;
+        letter-spacing: 0.06em;
+        margin-bottom: 0.8rem;
+        color: var(--white);
+      }
+      .av-title em {
+        color: var(--gold);
+        font-style: normal;
+      }
+      .av-desc {
+        font-size: 0.88rem;
+        color: var(--muted);
+        line-height: 1.75;
+      }
+      .av-kpis {
+        display: flex;
+        gap: 2rem;
+        margin-top: 1.5rem;
+      }
+      .av-kpi-val {
+        font-family: "Bebas Neue", sans-serif;
+        font-size: 1.8rem;
+        letter-spacing: 0.04em;
+        color: var(--red);
+        line-height: 1;
+      }
+      .av-kpi-label {
+        font-size: 0.65rem;
+        color: var(--muted);
+        text-transform: uppercase;
+        letter-spacing: 0.08em;
+      }
+
+      /* ── STATIONS ── */
+      .stations-section {
+        background: var(--obsidian);
+      }
+      .station-grid {
+        display: grid;
+        grid-template-columns: repeat(3, 1fr);
+        gap: 1px;
+        background: var(--line);
+        border: 1px solid var(--line);
+      }
+      .station-card {
+        background: var(--obsidian);
+        padding: 2rem;
+        position: relative;
+        overflow: hidden;
+        transition: background 0.3s;
+      }
+      .station-card:hover {
+        background: var(--obsidian-2);
+      }
+      .station-city {
+        font-family: "Bebas Neue", sans-serif;
+        font-size: 1.1rem;
+        letter-spacing: 0.1em;
+        color: var(--gold);
+        margin-bottom: 0.3rem;
+        display: flex;
+        align-items: center;
+        gap: 0.5rem;
+      }
+      .city-dot {
+        width: 6px;
+        height: 6px;
+        background: var(--red);
+        border-radius: 50%;
+      }
+      .station-name {
+        font-size: 0.82rem;
+        color: var(--muted);
+        margin-bottom: 1rem;
+      }
+      .station-nums {
+        display: flex;
+        justify-content: space-between;
+      }
+      .sn-val {
+        font-family: "Bebas Neue", sans-serif;
+        font-size: 1.5rem;
+        color: var(--white);
+      }
+      .sn-label {
+        font-size: 0.65rem;
+        color: var(--muted);
+        text-transform: uppercase;
+        letter-spacing: 0.06em;
+      }
+      .station-badge {
+        margin-top: 0.8rem;
+        display: inline-block;
+        font-size: 0.62rem;
+        letter-spacing: 0.1em;
+        text-transform: uppercase;
+        padding: 0.2rem 0.6rem;
+        border-radius: 0;
+      }
+      .badge-live {
+        background: rgba(218, 41, 28, 0.1);
+        color: var(--red);
+        border: 1px solid rgba(218, 41, 28, 0.2);
+      }
+      .badge-soon {
+        background: var(--gold-dim);
+        color: var(--gold);
+        border: 1px solid rgba(201, 168, 76, 0.2);
+      }
+      .station-card.add {
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        align-items: center;
+        text-align: center;
+        border: 1px dashed rgba(240, 236, 230, 0.06);
+        background: transparent;
+      }
+      .station-add-icon {
+        font-size: 2rem;
+        margin-bottom: 0.5rem;
+        opacity: 0.3;
+      }
+      .station-add-label {
+        font-size: 0.82rem;
+        font-weight: 500;
+        color: var(--muted);
+      }
+      .station-add-sub {
+        font-size: 0.72rem;
+        color: rgba(107, 103, 96, 0.5);
+        margin-top: 0.3rem;
+      }
+
+      /* ── CHARTS ── */
+      .charts-section {
+        background: var(--obsidian-2);
+      }
+      .charts-tabs {
+        display: flex;
+        gap: 0;
+        border: 1px solid var(--line);
+        width: fit-content;
+        margin-bottom: 2.5rem;
+      }
+      .tab-btn {
+        background: none;
+        border: none;
+        color: var(--muted);
+        font-family: "DM Sans", sans-serif;
+        font-weight: 400;
+        font-size: 0.78rem;
+        letter-spacing: 0.1em;
+        text-transform: uppercase;
+        padding: 0.7rem 1.6rem;
+        cursor: pointer;
+        border-right: 1px solid var(--line);
+        transition:
+          color 0.2s,
+          background 0.2s;
+      }
+      .tab-btn:last-child {
+        border-right: none;
+      }
+      .tab-btn.active {
+        color: var(--white);
+        background: var(--red);
+      }
+      .tab-btn:hover:not(.active) {
+        color: var(--white);
+        background: var(--obsidian-3);
+      }
+
+      .chart-panel {
+        display: none;
+      }
+      .chart-panel.active {
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        gap: 1px;
+        background: var(--line);
+        border: 1px solid var(--line);
+      }
+      .chart-panel.single.active {
+        display: block;
+        background: none;
+        border: none;
+      }
+      .chart-box {
+        background: var(--obsidian-2);
+        padding: 2rem;
+        transition: background 0.3s;
+      }
+      .chart-box:hover {
+        background: var(--obsidian-3);
+      }
+      .chart-title {
+        font-family: "Bebas Neue", sans-serif;
+        font-size: 1rem;
+        letter-spacing: 0.1em;
+        color: var(--muted);
+        margin-bottom: 1.5rem;
+        text-transform: uppercase;
+      }
+      .chart-box canvas {
+        max-height: 220px;
+        width: 100% !important;
+      }
+
+      /* ── FINANCES TABLE ── */
+      .finance-section {
+        background: var(--obsidian);
+      }
+      .fin-table {
+        width: 100%;
+        border-collapse: collapse;
+        margin-bottom: 3rem;
+      }
+      .fin-table th {
+        font-size: 0.68rem;
+        letter-spacing: 0.15em;
+        text-transform: uppercase;
+        color: var(--muted);
+        padding: 0.8rem 1.2rem;
+        border-bottom: 1px solid var(--line);
+        text-align: left;
+      }
+      .fin-table th:not(:first-child) {
+        text-align: right;
+      }
+      .fin-table td {
+        padding: 1rem 1.2rem;
+        font-size: 0.9rem;
+        border-bottom: 1px solid var(--line);
+      }
+      .fin-table td:not(:first-child) {
+        text-align: right;
+        font-family: "Bebas Neue", sans-serif;
+        font-size: 1rem;
+        letter-spacing: 0.04em;
+      }
+      .fin-table tr:hover td {
+        background: rgba(255, 255, 255, 0.015);
+      }
+      .fin-table .hl td {
+        background: rgba(218, 41, 28, 0.04);
+      }
+      .fin-table .total td {
+        border-top: 1px solid rgba(201, 168, 76, 0.3);
+        color: var(--gold);
+        font-weight: 500;
+      }
+      .fin-table .total td:not(:first-child) {
+        font-size: 1.1rem;
+        color: var(--gold-light);
+      }
+      .up {
+        color: #4a9e6b;
+      }
+
+      .fin-cards {
+        display: grid;
+        grid-template-columns: repeat(3, 1fr);
+        gap: 1px;
+        background: var(--line);
+        border: 1px solid var(--line);
+      }
+      .fin-card {
+        background: var(--obsidian);
+        padding: 2rem;
+      }
+      .fin-card-title {
+        font-size: 0.68rem;
+        letter-spacing: 0.15em;
+        text-transform: uppercase;
+        color: var(--gold);
+        margin-bottom: 1.2rem;
+      }
+      .fin-row {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        padding: 0.55rem 0;
+        border-bottom: 1px solid var(--line);
+      }
+      .fin-row:last-child {
+        border-bottom: none;
+      }
+      .fin-label {
+        font-size: 0.82rem;
+        color: var(--muted);
+      }
+      .fin-val {
+        font-family: "Bebas Neue", sans-serif;
+        font-size: 1rem;
+        letter-spacing: 0.04em;
+        color: var(--white);
+      }
+      .fin-val.gold {
+        color: var(--gold-light);
+      }
+      .fin-val.green {
+        color: #5bb878;
+      }
+
+      /* ── ROADMAP ── */
+      .roadmap-section {
+        background: var(--obsidian-2);
+      }
+      .phases {
+        display: grid;
+        grid-template-columns: repeat(4, 1fr);
+        gap: 1px;
+        background: var(--line);
+        border: 1px solid var(--line);
+      }
+      .phase {
+        background: var(--obsidian-2);
+        padding: 2.2rem 1.8rem;
+        position: relative;
+        overflow: hidden;
+        transition: background 0.3s;
+      }
+      .phase:hover {
+        background: var(--obsidian-3);
+      }
+      .phase::before {
+        content: "";
+        position: absolute;
+        top: 0;
+        left: 0;
+        right: 0;
+        height: 2px;
+        background: linear-gradient(90deg, var(--red), var(--gold));
+        transform: scaleX(0);
+        transition: transform 0.4s;
+      }
+      .phase:hover::before {
+        transform: scaleX(1);
+      }
+      .phase-num-bg {
+        font-family: "Bebas Neue", sans-serif;
+        font-size: 7rem;
+        color: rgba(218, 41, 28, 0.05);
+        position: absolute;
+        right: -0.5rem;
+        bottom: -0.5rem;
+        line-height: 1;
+        letter-spacing: -0.1em;
+      }
+      .phase-tag {
+        font-size: 0.65rem;
+        letter-spacing: 0.15em;
+        text-transform: uppercase;
+        color: var(--gold);
+        margin-bottom: 0.6rem;
+        display: block;
+      }
+      .phase-title {
+        font-family: "Bebas Neue", sans-serif;
+        font-size: 1.4rem;
+        letter-spacing: 0.06em;
+        margin-bottom: 0.2rem;
+      }
+      .phase-period {
+        font-size: 0.75rem;
+        color: var(--muted);
+        margin-bottom: 1.5rem;
+      }
+      .phase-list {
+        list-style: none;
+      }
+      .phase-list li {
+        font-size: 0.8rem;
+        color: var(--muted);
+        padding: 0.4rem 0;
+        border-bottom: 1px solid var(--line);
+        display: flex;
+        gap: 0.5rem;
+        line-height: 1.4;
+      }
+      .phase-list li::before {
+        content: "—";
+        color: var(--red);
+        flex-shrink: 0;
+      }
+      .phase-budget {
+        margin-top: 1.2rem;
+        padding-top: 1rem;
+        border-top: 1px solid var(--line);
+      }
+      .phase-budget-val {
+        font-family: "Bebas Neue", sans-serif;
+        font-size: 1.2rem;
+        letter-spacing: 0.04em;
+        color: var(--gold);
+      }
+      .phase-budget-sub {
+        font-size: 0.65rem;
+        color: var(--muted);
+        margin-top: 0.1rem;
+      }
+
+      /* ── TECH ── */
+      .tech-section {
+        background: var(--obsidian);
+      }
+      .tech-cols {
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        gap: 5rem;
+        align-items: start;
+      }
+      .tech-group {
+        margin-bottom: 1.8rem;
+      }
+      .tech-group-label {
+        font-size: 0.65rem;
+        letter-spacing: 0.18em;
+        text-transform: uppercase;
+        color: var(--gold);
+        margin-bottom: 0.9rem;
+      }
+      .tech-chips {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 0.4rem;
+      }
+      .tech-chip {
+        background: var(--obsidian-2);
+        border: 1px solid var(--line);
+        padding: 0.4rem 0.9rem;
+        font-size: 0.78rem;
+        color: var(--white);
+        transition:
+          border-color 0.2s,
+          color 0.2s,
+          background 0.2s;
+      }
+      .tech-chip:hover {
+        border-color: var(--gold);
+        color: var(--gold);
+        background: var(--gold-dim);
+      }
+      .arch-box {
+        background: var(--obsidian-2);
+        border: 1px solid var(--line);
+        padding: 2rem;
+      }
+      .arch-layer {
+        background: var(--obsidian);
+        border: 1px solid var(--line);
+        padding: 0.9rem 1.2rem;
+        margin-bottom: 0.4rem;
+        display: flex;
+        align-items: center;
+        gap: 1rem;
+        transition:
+          border-color 0.2s,
+          background 0.2s;
+      }
+      .arch-layer:hover {
+        border-color: rgba(218, 41, 28, 0.3);
+        background: var(--red-dim);
+      }
+      .arch-layer-icon {
+        font-size: 1.1rem;
+        flex-shrink: 0;
+      }
+      .arch-layer-name {
+        font-size: 0.82rem;
+        font-weight: 500;
+      }
+      .arch-layer-desc {
+        font-size: 0.72rem;
+        color: var(--muted);
+        margin-top: 0.1rem;
+      }
+      .arch-arrow {
+        text-align: center;
+        color: var(--red);
+        font-size: 0.75rem;
+        margin: -0.1rem 0;
+        display: block;
+        opacity: 0.5;
+      }
+
+      /* ── FEATURES ── */
+      .features-section {
+        background: var(--obsidian-2);
+      }
+      .feat-grid {
+        display: grid;
+        grid-template-columns: repeat(3, 1fr);
+        gap: 1px;
+        background: var(--line);
+        border: 1px solid var(--line);
+      }
+      .feat-card {
+        background: var(--obsidian-2);
+        padding: 2.5rem 2rem;
+        position: relative;
+        overflow: hidden;
+        transition: background 0.3s;
+      }
+      .feat-card:hover {
+        background: var(--obsidian-3);
+      }
+      .feat-card::after {
+        content: "";
+        position: absolute;
+        bottom: 0;
+        left: 0;
+        right: 0;
+        height: 1px;
+        background: var(--gold);
+        transform: scaleX(0);
+        transition: transform 0.4s;
+        transform-origin: left;
+      }
+      .feat-card:hover::after {
+        transform: scaleX(1);
+      }
+      .feat-icon {
+        font-size: 1.8rem;
+        margin-bottom: 1rem;
+        display: block;
+      }
+      .feat-name {
+        font-family: "Bebas Neue", sans-serif;
+        font-size: 1.1rem;
+        letter-spacing: 0.06em;
+        margin-bottom: 0.5rem;
+      }
+      .feat-desc {
+        font-size: 0.82rem;
+        color: var(--muted);
+        line-height: 1.65;
+      }
+      .feat-tag {
+        display: inline-block;
+        margin-top: 1rem;
+        font-size: 0.62rem;
+        letter-spacing: 0.1em;
+        text-transform: uppercase;
+        color: var(--gold);
+        border: 1px solid rgba(201, 168, 76, 0.2);
+        padding: 0.18rem 0.5rem;
+        background: var(--gold-dim);
+      }
+
+      /* ── FRANCHISÉ DASHBOARD ── */
+      .franchise-section {
+        background: var(--obsidian);
+      }
+      .fd-wrap {
+        background: var(--obsidian-2);
+        border: 1px solid var(--line);
+      }
+      .fd-head {
+        background: var(--red-dim);
+        border-bottom: 1px solid var(--line);
+        padding: 1.2rem 2rem;
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+      }
+      .fd-head-title {
+        font-family: "Bebas Neue", sans-serif;
+        font-size: 1rem;
+        letter-spacing: 0.1em;
+        color: var(--gold);
+      }
+      .fd-live {
+        font-size: 0.62rem;
+        letter-spacing: 0.12em;
+        text-transform: uppercase;
+        color: #5bb878;
+        border: 1px solid rgba(91, 184, 120, 0.2);
+        padding: 0.2rem 0.6rem;
+      }
+      .fd-body {
+        padding: 2rem;
+      }
+      .fd-kpis {
+        display: grid;
+        grid-template-columns: repeat(4, 1fr);
+        gap: 1px;
+        background: var(--line);
+        margin-bottom: 2rem;
+      }
+      .fd-kpi {
+        background: var(--obsidian);
+        padding: 1.2rem;
+        text-align: center;
+        transition: background 0.2s;
+      }
+      .fd-kpi:hover {
+        background: var(--obsidian-2);
+      }
+      .fd-kpi-val {
+        font-family: "Bebas Neue", sans-serif;
+        font-size: 1.6rem;
+        letter-spacing: 0.04em;
+        color: var(--white);
+        line-height: 1;
+      }
+      .fd-kpi-val em {
+        color: var(--gold);
+        font-style: normal;
+        font-size: 1rem;
+      }
+      .fd-kpi-label {
+        font-size: 0.65rem;
+        color: var(--muted);
+        text-transform: uppercase;
+        letter-spacing: 0.07em;
+        margin-top: 0.3rem;
+      }
+      .fd-table {
+        width: 100%;
+        border-collapse: collapse;
+      }
+      .fd-table th {
+        font-size: 0.65rem;
+        letter-spacing: 0.12em;
+        text-transform: uppercase;
+        color: var(--muted);
+        padding: 0.7rem 0.9rem;
+        border-bottom: 1px solid var(--line);
+        text-align: left;
+      }
+      .fd-table td {
+        font-size: 0.82rem;
+        color: var(--muted);
+        padding: 0.9rem 0.9rem;
+        border-bottom: 1px solid var(--line);
+      }
+      .fd-table td:first-child {
+        color: var(--white);
+        font-weight: 400;
+      }
+      .fd-table td.pos {
+        color: #5bb878;
+        font-family: "Bebas Neue", sans-serif;
+        font-size: 0.95rem;
+        letter-spacing: 0.04em;
+      }
+      .fd-table td.pend {
+        color: var(--gold);
+        font-family: "Bebas Neue", sans-serif;
+        font-size: 0.95rem;
+        letter-spacing: 0.04em;
+      }
+      .fd-table tr:hover td {
+        background: rgba(255, 255, 255, 0.015);
+      }
+
+      /* ── REVENUE FLOW ── */
+      .flow-wrap {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        gap: 0;
+        flex-wrap: wrap;
+        margin-top: 3.5rem;
+      }
+      .flow-node {
+        background: var(--obsidian-2);
+        border: 1px solid var(--line);
+        padding: 1.2rem 1.5rem;
+        text-align: center;
+        min-width: 140px;
+        transition:
+          border-color 0.2s,
+          background 0.2s;
+      }
+      .flow-node:hover {
+        border-color: rgba(218, 41, 28, 0.3);
+        background: var(--red-dim);
+      }
+      .flow-node.hl {
+        border-color: rgba(201, 168, 76, 0.3);
+        background: var(--gold-dim);
+      }
+      .flow-icon {
+        font-size: 1.4rem;
+        margin-bottom: 0.4rem;
+      }
+      .flow-label {
+        font-family: "Bebas Neue", sans-serif;
+        font-size: 0.95rem;
+        letter-spacing: 0.08em;
+      }
+      .flow-sub {
+        font-size: 0.68rem;
+        color: var(--muted);
+        margin-top: 0.2rem;
+      }
+      .flow-arr {
+        padding: 0 0.3rem;
+        color: var(--red);
+        font-size: 1.2rem;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+      }
+      .flow-arr-label {
+        font-size: 0.6rem;
+        color: var(--gold);
+        white-space: nowrap;
+      }
+
+      /* ── CTA ── */
+      .cta-section {
+        padding: 9rem 5vw;
+        text-align: center;
+        position: relative;
+        overflow: hidden;
+        background: var(--obsidian);
+      }
+      .cta-glow {
+        position: absolute;
+        inset: 0;
+        background: radial-gradient(
+          ellipse 70% 60% at 50% 50%,
+          rgba(218, 41, 28, 0.12) 0%,
+          transparent 70%
+        );
+        animation: glowPulse 5s ease-in-out infinite;
+      }
+      .cta-inner {
+        position: relative;
+        z-index: 1;
+      }
+      .cta-title {
+        font-family: "Bebas Neue", sans-serif;
+        font-size: clamp(3rem, 8vw, 7rem);
+        letter-spacing: 0.06em;
+        line-height: 0.9;
+        margin-bottom: 1.5rem;
+      }
+      .cta-title em {
+        color: var(--gold);
+        font-style: normal;
+      }
+      .cta-sub {
+        font-size: 0.95rem;
+        color: var(--muted);
+        margin-bottom: 3rem;
+        font-weight: 300;
+      }
+      .cta-actions {
+        display: flex;
+        justify-content: center;
+        gap: 1rem;
+      }
+
+      /* ── FOOTER ── */
+      footer {
+        background: #080808;
+        padding: 2rem 5vw;
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        border-top: 1px solid var(--line);
+      }
+      .footer-logo {
+        font-family: "Bebas Neue", sans-serif;
+        font-size: 1.2rem;
+        letter-spacing: 0.12em;
+      }
+      .footer-logo em {
+        color: var(--red);
+        font-style: normal;
+      }
+      .footer-logo span {
+        color: var(--gold);
+      }
+      .footer-meta {
+        font-size: 0.72rem;
+        color: var(--muted);
+      }
+
+      /* ── REVEAL ANIMATIONS ── */
+      .reveal {
+        opacity: 0;
+        transform: translateY(30px);
+        transition:
+          opacity 0.8s ease,
+          transform 0.8s ease;
+      }
+      .reveal.in {
+        opacity: 1;
+        transform: translateY(0);
+      }
+      .reveal-left {
+        opacity: 0;
+        transform: translateX(-30px);
+        transition:
+          opacity 0.8s ease,
+          transform 0.8s ease;
+      }
+      .reveal-left.in {
+        opacity: 1;
+        transform: translateX(0);
+      }
+
+      /* Stagger children */
+      .stagger > * {
+        opacity: 0;
+        transform: translateY(20px);
+      }
+      .stagger.in > *:nth-child(1) {
+        animation: staggerIn 0.6s 0.05s ease forwards;
+      }
+      .stagger.in > *:nth-child(2) {
+        animation: staggerIn 0.6s 0.12s ease forwards;
+      }
+      .stagger.in > *:nth-child(3) {
+        animation: staggerIn 0.6s 0.19s ease forwards;
+      }
+      .stagger.in > *:nth-child(4) {
+        animation: staggerIn 0.6s 0.26s ease forwards;
+      }
+      .stagger.in > *:nth-child(5) {
+        animation: staggerIn 0.6s 0.33s ease forwards;
+      }
+      .stagger.in > *:nth-child(6) {
+        animation: staggerIn 0.6s 0.4s ease forwards;
+      }
+      .stagger.in > *:nth-child(7) {
+        animation: staggerIn 0.6s 0.47s ease forwards;
+      }
+      .stagger.in > *:nth-child(8) {
+        animation: staggerIn 0.6s 0.54s ease forwards;
+      }
+      .stagger.in > *:nth-child(9) {
+        animation: staggerIn 0.6s 0.61s ease forwards;
+      }
+      @keyframes staggerIn {
+        to {
+          opacity: 1;
+          transform: translateY(0);
+        }
+      }
+
+      /* ── COUNTER ANIMATION ── */
+      .count-up {
+        display: inline-block;
+      }
+
+      /* ── RESPONSIVE ── */
+      @media (max-width: 1100px) {
+        nav {
+          padding: 1.2rem 3vw;
+        }
+        section {
+          padding: 5rem 3vw;
+        }
+        .hero {
+          padding: 8rem 3vw 4rem;
+          flex-direction: column;
+        }
+        .hero-stats {
+          position: static;
+          transform: none;
+          flex-direction: row;
+          flex-wrap: wrap;
+          margin-top: 2rem;
+          animation: fadeUp 0.8s 0.7s ease both;
+        }
+        .steps {
+          grid-template-columns: repeat(3, 1fr);
+          gap: 2rem;
+        }
+        .step-connector {
+          display: none;
+        }
+        .av-grid,
+        .phases,
+        .feat-grid,
+        .fin-cards {
+          grid-template-columns: 1fr;
+        }
+        .tech-cols {
+          grid-template-columns: 1fr;
+          gap: 3rem;
+        }
+        .station-grid {
+          grid-template-columns: repeat(2, 1fr);
+        }
+        .fd-kpis {
+          grid-template-columns: repeat(2, 1fr);
+        }
+        .problem-grid {
+          grid-template-columns: 1fr;
+        }
+        .chart-panel.active {
+          grid-template-columns: 1fr;
+        }
+      }
+      @media (max-width: 640px) {
+        .hero-title {
+          font-size: 3.5rem;
+        }
+        .steps {
+          grid-template-columns: repeat(2, 1fr);
+        }
+        .station-grid {
+          grid-template-columns: 1fr;
+        }
+        .phases {
+          grid-template-columns: 1fr 1fr;
+        }
+        footer {
+          flex-direction: column;
+          gap: 0.8rem;
+          text-align: center;
+        }
+      }
+    </style>
+  </head>
+  <body>
+    <!-- CURSOR -->
+    <div class="cursor" id="cursor"></div>
+    <div class="cursor-ring" id="ring"></div>
+
+    <!-- NAV -->
+    <nav>
+      <a href="#" class="nav-logo"
+        ><em>Barka</em>Pay <span>× TotalEnergies</span></a
+      >
+      <button
+        class="nav-cta"
+        onclick="
+          document.getElementById('cta').scrollIntoView({ behavior: 'smooth' })
+        "
+      >
+        Engager le Partenariat
+      </button>
+    </nav>
+
+    <!-- HERO -->
+    <section class="hero">
+      <div class="hero-bg-line"></div>
+      <div class="hero-bg-line"></div>
+      <div class="hero-bg-line"></div>
+      <div class="hero-bg-line"></div>
+      <div class="hero-glow"></div>
+
+      <div class="hero-content">
+        <div class="hero-eyebrow">
+          <div class="eyebrow-line"></div>
+          <span class="eyebrow-text"
+            >Présentation Partenariat Stratégique · Burkina Faso · 2026</span
+          >
         </div>
-        <div class="petro-kpi">
-          <div class="petro-kpi-val">0 FCFA</div>
-          <div class="petro-kpi-label">Cash manipulé</div>
-        </div>
-        <div class="petro-kpi">
-          <div class="petro-kpi-val">+40%</div>
-          <div class="petro-kpi-label">Satisfaction pompiste</div>
-        </div>
-      </div>
-    </div>
 
-    <!-- Card 2: Flux de trésorerie -->
-    <div class="petro-card">
-      <span class="petro-icon">💹</span>
-      <div class="petro-title">Optimisation des <span>Flux de Trésorerie</span> Total</div>
-      <div class="petro-desc">
-        Aujourd'hui, les stations TotalEnergies Burkina gèrent une trésorerie fragmentée : espèces, Mobile Money, occasionnellement carte. <strong>BarkaPay centralise tous les flux</strong> dans un tableau de bord unique, en temps réel.
-        <br><br>
-        Le siège TotalEnergies accède à une <strong>vue consolidée des encaissements</strong> par station, par heure, par type de carburant — avec <strong>réconciliation automatique</strong> et rapports financiers prêts pour audit. Le cycle cash-to-bank passe de J+2 à instantané.
-      </div>
-      <div class="petro-kpis">
-        <div class="petro-kpi">
-          <div class="petro-kpi-val">J+0</div>
-          <div class="petro-kpi-label">Réconciliation</div>
-        </div>
-        <div class="petro-kpi">
-          <div class="petro-kpi-val">100%</div>
-          <div class="petro-kpi-label">Traçabilité</div>
-        </div>
-        <div class="petro-kpi">
-          <div class="petro-kpi-val">-60%</div>
-          <div class="petro-kpi-label">Coûts de gestion cash</div>
-        </div>
-      </div>
-    </div>
+        <h1 class="hero-title">
+          <div class="line"><span>BARKA</span></div>
+          <div class="line"><span>PAY</span></div>
+          <div class="line"><span>× TOTAL</span></div>
+        </h1>
 
-    <!-- Card 3: Base clients unifiée -->
-    <div class="petro-card">
-      <span class="petro-icon">🧠</span>
-      <div class="petro-title">Base de Données Client <span>Unifiée pour Total</span></div>
-      <div class="petro-desc">
-        Actuellement, TotalEnergies Burkina ne sait pas qui sont ses clients récurrents, leurs habitudes de consommation, ni leur localisation. BarkaPay crée un <strong>profil client structuré</strong> à chaque transaction.
-        <br><br>
-        TotalEnergies accède à un <strong>dashboard analytique propriétaire</strong> : fréquence de passage, volume moyen par station, heures de pointe à Ouagadougou vs Bobo-Dioulasso, segmentation par profil (B2C / flotte B2B). Ces données alimentent les <strong>campagnes marketing, la politique tarifaire et les négociations fournisseurs</strong>.
-      </div>
-      <div class="petro-kpis">
-        <div class="petro-kpi">
-          <div class="petro-kpi-val">500K</div>
-          <div class="petro-kpi-label">Profils clients An.1</div>
-        </div>
-        <div class="petro-kpi">
-          <div class="petro-kpi-val">360°</div>
-          <div class="petro-kpi-label">Vue client unifiée</div>
-        </div>
-        <div class="petro-kpi">
-          <div class="petro-kpi-val">+0.3%</div>
-          <div class="petro-kpi-label">Revenu / transaction</div>
+        <p class="hero-sub">
+          Digitaliser les stations-service de
+          <strong>Ouagadougou et Bobo-Dioulasso</strong> — paiement sans cash,
+          sécurité des pompistes, trésorerie unifiée.
+        </p>
+        <div class="hero-actions">
+          <button
+            class="btn-red"
+            onclick="
+              document
+                .getElementById('avantage')
+                .scrollIntoView({ behavior: 'smooth' })
+            "
+          >
+            Voir l'Avantage TotalEnergies
+          </button>
+          <button
+            class="btn-ghost"
+            onclick="
+              document
+                .getElementById('concept')
+                .scrollIntoView({ behavior: 'smooth' })
+            "
+          >
+            Le Concept
+          </button>
         </div>
       </div>
-    </div>
 
-    <!-- Card 4: Digitalisation réseau pompes -->
-    <div class="petro-card">
-      <span class="petro-icon">⛽</span>
-      <div class="petro-title">Digitalisation du <span>Réseau de Pompes</span> BF</div>
-      <div class="petro-desc">
-        Chaque pompe TotalEnergies devient un <strong>point d'encaissement digital</strong> identifié : numéro de pompe, pompiste assigné, volume distribué, heure. BarkaPay connecte le monde physique des stations au cloud en temps réel.
-        <br><br>
-        Le réseau Burkina — Ouagadougou (Secteurs 15, 22, 25, Karpala…) et Bobo-Dioulasso (Hamdallaye, Koko…) — bénéficie d'une <strong>visibilité opérationnelle totale</strong> sans modifier l'infrastructure existante. Déploiement en moins de 72h par station.
-      </div>
-      <div class="petro-kpis">
-        <div class="petro-kpi">
-          <div class="petro-kpi-val">&lt;72h</div>
-          <div class="petro-kpi-label">Déploiement / station</div>
+      <div class="hero-stats">
+        <div class="hstat">
+          <div class="hstat-val">
+            <span class="count-up" data-target="40.6">0</span><em> Mds FCFA</em>
+          </div>
+          <div class="hstat-label">Revenus Année 1</div>
         </div>
-        <div class="petro-kpi">
-          <div class="petro-kpi-val">0</div>
-          <div class="petro-kpi-label">Infra à installer</div>
+        <div class="hstat">
+          <div class="hstat-val">
+            <span class="count-up" data-target="3826">0</span><em>%</em>
+          </div>
+          <div class="hstat-label">ROI Année 1</div>
         </div>
-        <div class="petro-kpi">
-          <div class="petro-kpi-val">100%</div>
-          <div class="petro-kpi-label">Pompes connectées</div>
+        <div class="hstat">
+          <div class="hstat-val">
+            <span class="count-up" data-target="500">0</span><em>K</em>
+          </div>
+          <div class="hstat-label">Utilisateurs cibles An.1</div>
         </div>
       </div>
-    </div>
+    </section>
 
-  </div>
+    <div class="divider"></div>
 
-  <!-- Station map -->
-  <div class="station-map reveal">
-    <div class="station-map-header">
-      <div>
-        <div class="station-map-title">🗺️ Réseau TotalEnergies — Déploiement BarkaPay Burkina Faso</div>
-        <div class="station-map-sub">Phase 1 : Ouagadougou · Phase 2 : Bobo-Dioulasso</div>
-      </div>
-      <div class="station-map-legend">
-        <div style="display:flex;align-items:center;gap:0.4rem"><div class="legend-dot-te" style="background:var(--te-orange)"></div><span class="legend-label">Phase 1 — Live</span></div>
-        <div style="display:flex;align-items:center;gap:0.4rem"><div class="legend-dot-te" style="background:var(--te-blue)"></div><span class="legend-label">Phase 2 — Q3 2026</span></div>
-      </div>
-    </div>
-    <div class="station-map-grid">
-      <div class="station-pin">
-        <div class="station-pin-city"><div class="city-dot ouaga"></div>Ouagadougou</div>
-        <div class="station-pin-name">Station Total — Secteur 15 / Ouaga 2000</div>
-        <div class="station-pin-stats">
-          <div><div class="station-pin-stat-val">2.8M</div><div class="station-pin-stat-label">FCFA / jour</div></div>
-          <div><div class="station-pin-stat-val">180</div><div class="station-pin-stat-label">Txn / jour</div></div>
-        </div>
-        <span class="station-status-badge status-live">● Phase 1 · Live</span>
-      </div>
-      <div class="station-pin">
-        <div class="station-pin-city"><div class="city-dot ouaga"></div>Ouagadougou</div>
-        <div class="station-pin-name">Station Total — Karpala / Zone Industrielle</div>
-        <div class="station-pin-stats">
-          <div><div class="station-pin-stat-val">3.5M</div><div class="station-pin-stat-label">FCFA / jour</div></div>
-          <div><div class="station-pin-stat-val">220</div><div class="station-pin-stat-label">Txn / jour</div></div>
-        </div>
-        <span class="station-status-badge status-live">● Phase 1 · Live</span>
-      </div>
-      <div class="station-pin">
-        <div class="station-pin-city"><div class="city-dot ouaga"></div>Ouagadougou</div>
-        <div class="station-pin-name">Station Total — Secteur 22 / Pissy</div>
-        <div class="station-pin-stats">
-          <div><div class="station-pin-stat-val">1.9M</div><div class="station-pin-stat-label">FCFA / jour</div></div>
-          <div><div class="station-pin-stat-val">145</div><div class="station-pin-stat-label">Txn / jour</div></div>
-        </div>
-        <span class="station-status-badge status-live">● Phase 1 · Live</span>
-      </div>
-      <div class="station-pin">
-        <div class="station-pin-city"><div class="city-dot" style="background:var(--te-blue)"></div>Bobo-Dioulasso</div>
-        <div class="station-pin-name">Station Total — Hamdallaye</div>
-        <div class="station-pin-stats">
-          <div><div class="station-pin-stat-val">2.1M</div><div class="station-pin-stat-label">FCFA / jour</div></div>
-          <div><div class="station-pin-stat-val">160</div><div class="station-pin-stat-label">Txn / jour</div></div>
-        </div>
-        <span class="station-status-badge status-soon">◎ Phase 2 · Q3 2026</span>
-      </div>
-      <div class="station-pin">
-        <div class="station-pin-city"><div class="city-dot" style="background:var(--te-blue)"></div>Bobo-Dioulasso</div>
-        <div class="station-pin-name">Station Total — Koko / Dioulassoba</div>
-        <div class="station-pin-stats">
-          <div><div class="station-pin-stat-val">1.7M</div><div class="station-pin-stat-label">FCFA / jour</div></div>
-          <div><div class="station-pin-stat-val">130</div><div class="station-pin-stat-label">Txn / jour</div></div>
-        </div>
-        <span class="station-status-badge status-soon">◎ Phase 2 · Q3 2026</span>
-      </div>
-      <div class="station-pin" style="border:1px dashed rgba(255,255,255,0.08);display:flex;flex-direction:column;justify-content:center;align-items:center;text-align:center;">
-        <div style="font-size:1.8rem;margin-bottom:0.5rem">+</div>
-        <div style="font-family:'Syne',sans-serif;font-weight:700;font-size:0.85rem;">Expansion UEMOA</div>
-        <div style="font-size:0.72rem;color:var(--gray);margin-top:0.3rem;">Sénégal, Côte d'Ivoire, Mali — Phase 3</div>
-      </div>
-    </div>
-  </div>
-</section>
-
-<!-- FEATURES -->
-<section id="fonctionnalites" style="background:var(--navy);">
-  <span class="section-label">Fonctionnalités</span>
-  <h2 class="section-title">Une plateforme. Tout en un.</h2>
-  <p class="section-sub">BarkaPay couvre chaque cas d'usage — du particulier à l'entreprise, du parent au franchisé TotalEnergies.</p>
-  <div class="features-grid reveal">
-    <div class="feature-card"><span class="feat-icon">📱</span><div class="feat-title">Portefeuille Numérique</div><div class="feat-desc">Rechargeable via Orange Money, Moov Money, MTN, Carte Visa/Mastercard. Solde consultable en temps réel. Historique complet.</div><div class="feat-tags"><span class="feat-tag">Multi-devises</span><span class="feat-tag">Temps réel</span></div></div>
-    <div class="feature-card"><span class="feat-icon">📲</span><div class="feat-title">Paiement QR Code</div><div class="feat-desc">QR dynamique généré à chaque transaction. Durée de validité limitée. Impossible de réutiliser ou de frauder. Sécurité maximale.</div><div class="feat-tags"><span class="feat-tag">Sécurisé</span><span class="feat-tag">Dynamique</span></div></div>
-    <div class="feature-card"><span class="feat-icon">👨‍👧</span><div class="feat-title">Gestion Parentale</div><div class="feat-desc">Créez des comptes enfants, rechargez à distance, définissez des limites de dépenses, recevez des alertes. Contrôle total en temps réel.</div><div class="feat-tags"><span class="feat-tag">Contrôle parental</span><span class="feat-tag">Alertes</span></div></div>
-    <div class="feature-card"><span class="feat-icon">🏢</span><div class="feat-title">Gestion de Flotte B2B</div><div class="feat-desc">Tableau de bord centralisé pour les entreprises. Suivi par véhicule et conducteur. Rapports analytiques détaillés et exports.</div><div class="feat-tags"><span class="feat-tag blue">B2B</span><span class="feat-tag blue">Analytics</span></div></div>
-    <div class="feature-card"><span class="feat-icon">🏆</span><div class="feat-title">Programme de Fidélité</div><div class="feat-desc">Points accumulés à chaque plein. 4 niveaux (Bronze → Platine). Réductions automatiques et accès aux services premium.</div><div class="feat-tags"><span class="feat-tag green">Points</span><span class="feat-tag green">Réductions</span></div></div>
-    <div class="feature-card"><span class="feat-icon">🔒</span><div class="feat-title">Sécurité Bancaire</div><div class="feat-desc">HTTPS/TLS 1.3, OAuth 2.0, JWT, détection de fraude IA, conformité PCI-DSS, AML/KYC. Zéro vulnérabilité critique tolérée.</div><div class="feat-tags"><span class="feat-tag">PCI-DSS</span><span class="feat-tag">OAuth 2.0</span></div></div>
-    <div class="feature-card"><span class="feat-icon">🏗️</span><div class="feat-title">Espace Franchisé Total</div><div class="feat-desc">Chaque propriétaire de licence TotalEnergies au Burkina reçoit un compte dédié pour suivre toutes les transactions et recevoir automatiquement sa part des revenus.</div><div class="feat-tags"><span class="feat-tag gold">Franchisés</span><span class="feat-tag gold">Reversement Auto</span></div></div>
-    <div class="feature-card" style="background:rgba(8,94,189,0.03);"><span class="feat-icon">⛽</span><div class="feat-title">Prix Carburant en Temps Réel</div><div class="feat-desc">L'app affiche le prix du litre à chaque station alentour, permet de comparer et de réserver son créneau de ravitaillement. Zéro surprise à la pompe.</div><div class="feat-tags"><span class="feat-tag blue">Comparateur</span><span class="feat-tag blue">Géolocalisation</span></div></div>
-    <div class="feature-card" style="background:rgba(80,190,135,0.03);"><span class="feat-icon">🤝</span><div class="feat-title">Parrainage & Cashback</div><div class="feat-desc">Chaque utilisateur reçoit un code unique. Il gagne 500 FCFA de crédit carburant par filleul actif. Le filleul bénéficie de 500 FCFA offerts dès le premier plein.</div><div class="feat-tags"><span class="feat-tag green">Viral</span><span class="feat-tag green">Cashback FCFA</span></div></div>
-  </div>
-</section>
-
-<!-- FINANCIAL CHARTS -->
-<section id="finances" class="charts-section">
-  <span class="section-label">Projections Financières</span>
-  <h2 class="section-title">Des chiffres qui parlent.</h2>
-  <p class="section-sub">Croissance de 40.6 Mds à 462 Mds FCFA en 3 ans. ROI de 3826% dès la première année. Marge brute stable au-dessus de 96%.</p>
-
-  <div class="charts-tabs">
-    <button class="tab-btn active" onclick="switchTab('tab-revenue',this)">Revenus</button>
-    <button class="tab-btn" onclick="switchTab('tab-users',this)">Utilisateurs</button>
-    <button class="tab-btn" onclick="switchTab('tab-profit',this)">Rentabilité</button>
-    <button class="tab-btn" onclick="switchTab('tab-roi',this)">ROI</button>
-  </div>
-
-  <div id="tab-revenue" class="chart-panel active reveal">
-    <div class="chart-box">
-      <div class="chart-box-title">Projection des Revenus — 3 Ans (Mds FCFA)</div>
-      <canvas id="chartRevenue"></canvas>
-    </div>
-    <div class="chart-box">
-      <div class="chart-box-title">Répartition des Revenus — Année 1</div>
-      <canvas id="chartBreakdown1"></canvas>
-    </div>
-    <div class="chart-box">
-      <div class="chart-box-title">Volume de Transactions (M / mois)</div>
-      <canvas id="chartTransactions"></canvas>
-    </div>
-    <div class="chart-box">
-      <div class="chart-box-title">Marge Brute — 3 Ans (%)</div>
-      <canvas id="chartMargin"></canvas>
-    </div>
-  </div>
-
-  <div id="tab-users" class="chart-panel single-col reveal">
-    <div class="chart-box">
-      <div class="chart-box-title">Croissance des Utilisateurs Actifs — 36 Mois</div>
-      <canvas id="chartUsers" style="max-height:320px"></canvas>
-    </div>
-  </div>
-
-  <div id="tab-profit" class="chart-panel single-col reveal">
-    <div class="chart-box">
-      <div class="chart-box-title">Analyse de Rentabilité — Revenus vs Coûts vs Bénéfice (Mds FCFA)</div>
-      <canvas id="chartProfit" style="max-height:320px"></canvas>
-    </div>
-  </div>
-
-  <div id="tab-roi" class="chart-panel single-col reveal">
-    <div class="chart-box">
-      <div class="chart-box-title">Retour sur Investissement — 3 Ans (%)</div>
-      <canvas id="chartROI" style="max-height:320px"></canvas>
-    </div>
-  </div>
-</section>
-
-<!-- FINANCIAL TABLE -->
-<section class="finance-section">
-  <span class="section-label">Modèle Économique</span>
-  <h2 class="section-title">Sources de revenus diversifiées.</h2>
-  <table class="finance-table reveal">
-    <thead>
-      <tr>
-        <th>Source de Revenus</th><th>Taux</th><th>Année 1</th><th>Année 2</th><th>Année 3</th>
-      </tr>
-    </thead>
-    <tbody>
-      <tr class="highlight"><td>🔄 Frais de Transaction</td><td>1.5%</td><td>26.2 Mds</td><td>106.1 Mds</td><td>298.4 Mds</td></tr>
-      <tr><td>💳 Frais de Recharge</td><td>0.75%</td><td>13.1 Mds</td><td>53.1 Mds</td><td>149.1 Mds</td></tr>
-      <tr><td>⭐ Services Premium B2B</td><td>Abonnement</td><td>983 M</td><td>5.3 Mds</td><td>11.1 Mds</td></tr>
-      <tr><td>📈 Revenus d'Intérêts</td><td>Variable</td><td>328 M</td><td>4.5 Mds</td><td>3.7 Mds</td></tr>
-      <tr class="total-row"><td>💰 TOTAL REVENUS</td><td>—</td><td class="up">40.6 Mds FCFA</td><td class="up">169 Mds FCFA</td><td class="up">462 Mds FCFA</td></tr>
-    </tbody>
-  </table>
-
-  <div class="fin-cards reveal">
-    <div class="fin-card">
-      <div class="fin-card-title">Budget MVP (FCFA)</div>
-      <div class="fin-row"><span class="fin-label">Développement</span><span class="fin-val">32.8 M FCFA</span></div>
-      <div class="fin-row"><span class="fin-label">Infrastructure Cloud</span><span class="fin-val">6.6 M FCFA</span></div>
-      <div class="fin-row"><span class="fin-label">Marketing Lancement</span><span class="fin-val">32.8 M FCFA</span></div>
-      <div class="fin-row"><span class="fin-label">Conformité / Légal</span><span class="fin-val">13.1 M FCFA</span></div>
-      <div class="fin-row"><span class="fin-label">Support Client</span><span class="fin-val">3.3 M FCFA</span></div>
-      <div class="fin-row"><span class="fin-label">Contingence (10%)</span><span class="fin-val">8.8 M FCFA</span></div>
-      <div class="fin-row"><span class="fin-label" style="font-weight:700;color:var(--white)">TOTAL MVP</span><span class="fin-val gold">97.3 M FCFA</span></div>
-    </div>
-    <div class="fin-card">
-      <div class="fin-card-title">KPIs Techniques — Cibles An.1</div>
-      <div class="fin-row"><span class="fin-label">Disponibilité SLA</span><span class="fin-val green">99.9%</span></div>
-      <div class="fin-row"><span class="fin-label">Temps de réponse</span><span class="fin-val green">&lt; 500ms</span></div>
-      <div class="fin-row"><span class="fin-label">Taux d'erreur</span><span class="fin-val green">&lt; 0.1%</span></div>
-      <div class="fin-row"><span class="fin-label">Taux de rétention</span><span class="fin-val green">70%</span></div>
-      <div class="fin-row"><span class="fin-label">Temps de paiement</span><span class="fin-val green">&lt; 30s</span></div>
-      <div class="fin-row"><span class="fin-label">Couverture tests</span><span class="fin-val green">80%+</span></div>
-      <div class="fin-row"><span class="fin-label" style="font-weight:700;color:var(--white)">Rollback max</span><span class="fin-val gold">15 min</span></div>
-    </div>
-    <div class="fin-card">
-      <div class="fin-card-title">KPIs Métier — Cibles An.1</div>
-      <div class="fin-row"><span class="fin-label">Utilisateurs actifs</span><span class="fin-val green">500 000</span></div>
-      <div class="fin-row"><span class="fin-label">Transactions / mois</span><span class="fin-val green">2 000 000</span></div>
-      <div class="fin-row"><span class="fin-label">Montant moy. / txn</span><span class="fin-val">19 600 FCFA</span></div>
-      <div class="fin-row"><span class="fin-label">Revenus journaliers</span><span class="fin-val green">111 M FCFA</span></div>
-      <div class="fin-row"><span class="fin-label">Taux de croissance</span><span class="fin-val green">+40% / trimestre</span></div>
-      <div class="fin-row"><span class="fin-label">Pays couverts</span><span class="fin-val">6 pays UEMOA</span></div>
-      <div class="fin-row"><span class="fin-label" style="font-weight:700;color:var(--white)">ROI An.1</span><span class="fin-val gold">3 826%</span></div>
-    </div>
-  </div>
-</section>
-
-<!-- ROADMAP -->
-<section id="roadmap" class="roadmap-section">
-  <span class="section-label">Feuille de Route</span>
-  <h2 class="section-title">MVP en 3 mois. Leader en 18.</h2>
-  <p class="section-sub">4 phases bien définies — du MVP fonctionnel sur les stations Ouagadougou à la plateforme dominante d'Afrique de l'Ouest.</p>
-  <div class="roadmap-phases reveal">
-    <div class="phase-card"><span class="phase-num">1</span><span class="phase-tag">Phase 1 · MVP</span><div class="phase-title">Lancement Ouaga</div><div class="phase-period">Mois 0 → 3</div><ul class="phase-items"><li>Inscription via numéro de téléphone</li><li>Recharge Mobile Money (Orange, Moov)</li><li>Paiement carburant QR Code</li><li>Gestion parentale basique</li><li>Application pompiste simplifiée</li><li>Mode hors-ligne USSD inclus</li></ul><div class="phase-budget">97.3 M FCFA <span>Budget MVP</span></div></div>
-    <div class="phase-card"><span class="phase-num">2</span><span class="phase-tag">Phase 2 · Expansion</span><div class="phase-title">Bobo + B2B</div><div class="phase-period">Mois 4 → 9</div><ul class="phase-items"><li>Recharge par carte bancaire</li><li>Programme de fidélité 4 niveaux</li><li>Abonnement carburant illimité</li><li>Gestion de flotte B2B + carte virtuelle</li><li><strong style="color:var(--te-orange)">Compte franchisé Total — suivi + reversement</strong></li><li>Prix carburant géolocalisé temps réel</li></ul><div class="phase-budget">65–130 M FCFA <span>Budget Phase 2</span></div></div>
-    <div class="phase-card"><span class="phase-num">3</span><span class="phase-tag">Phase 3 · Intégration</span><div class="phase-title">Réseau UEMOA</div><div class="phase-period">Mois 10 → 18</div><ul class="phase-items"><li>Stations partenaires (Afriquia, OLA)</li><li>Score conducteur + offres assurance</li><li>Intelligence carburant UEMOA (data B2B)</li><li>Transfert de crédit entre utilisateurs</li><li>Expansion géographique 6 pays UEMOA</li><li>Parrainage viral FCFA automatisé</li></ul><div class="phase-budget">130–260 M FCFA <span>Budget Phase 3</span></div></div>
-    <div class="phase-card"><span class="phase-num">4</span><span class="phase-tag">Phase 4 · Innovation</span><div class="phase-title">Domination</div><div class="phase-period">Mois 19+</div><ul class="phase-items"><li>Paiement par biométrie (Face ID)</li><li>Micro-crédit carburant (paiement différé)</li><li>Expansion électricité, eau, mobile</li><li>Marchés adjacents Afrique Centrale</li><li>Rapports data anonymisés aux régulateurs</li><li>5M utilisateurs — leader continental</li></ul><div class="phase-budget">260 M FCFA+ <span>Budget Phase 4</span></div></div>
-  </div>
-</section>
-
-<!-- PLAY OBJECTIVES -->
-<section class="play-section">
-  <span class="section-label">Cas d'Usage</span>
-  <h2 class="section-title">20+ Objectifs Play.</h2>
-  <p class="section-sub">Chaque segment de marché, chaque scénario d'usage couvert — du conducteur particulier à la grande entreprise.</p>
-  <div class="play-grid reveal">
-    <div class="play-card"><div class="play-idx">01</div><div class="play-name">Conducteur Individuel</div><div class="play-desc">Paiement rapide et sécurisé sans espèces ni carte physique</div><div class="play-seg b2c">B2C</div></div>
-    <div class="play-card"><div class="play-idx">02</div><div class="play-name">Parent Rechargeant Enfant</div><div class="play-desc">Gestion du compte carburant enfant avec limites et suivi</div><div class="play-seg b2c">B2C</div></div>
-    <div class="play-card"><div class="play-idx">03</div><div class="play-name">Gestion de Flotte</div><div class="play-desc">Suivi centralisé par véhicule/conducteur, rapports analytiques</div><div class="play-seg b2b">B2B</div></div>
-    <div class="play-card"><div class="play-idx">04</div><div class="play-name">Conducteur Professionnel</div><div class="play-desc">Taxi / transport: paiements ultra-rapides entre les courses</div><div class="play-seg b2c">B2C</div></div>
-    <div class="play-card"><div class="play-idx">05</div><div class="play-name">Conducteur Occasionnel</div><div class="play-desc">Touriste sans compte bancaire local, accès facile</div><div class="play-seg b2c">B2C</div></div>
-    <div class="play-card"><div class="play-idx">06</div><div class="play-name">Petit Commerçant</div><div class="play-desc">Vendeur ambulant, recharge via Mobile Money</div><div class="play-seg b2c">B2C</div></div>
-    <div class="play-card"><div class="play-idx">07</div><div class="play-name">Budget Contrôlé</div><div class="play-desc">Alertes et blocage automatique à dépassement de limite</div><div class="play-seg b2c">B2C</div></div>
-    <div class="play-card"><div class="play-idx">08</div><div class="play-name">Recharge Collective</div><div class="play-desc">Covoiturage — partage transparent des frais de carburant</div><div class="play-seg b2c">B2C</div></div>
-    <div class="play-card"><div class="play-idx">09</div><div class="play-name">Programme Fidélité</div><div class="play-desc">Points cumulés, réductions automatiques pour clients réguliers</div><div class="play-seg b2c">B2C</div></div>
-    <div class="play-card"><div class="play-idx">10</div><div class="play-name">Paiement Différé</div><div class="play-desc">Payer maintenant, rembourser plus tard avec flexibilité</div><div class="play-seg b2c">B2C</div></div>
-    <div class="play-card"><div class="play-idx">11</div><div class="play-name">Abonnement Illimité</div><div class="play-desc">Accès forfaitaire à un volume de litres mensuel fixe</div><div class="play-seg b2c">B2C</div></div>
-    <div class="play-card"><div class="play-idx">12</div><div class="play-name">Transfert de Crédit</div><div class="play-desc">Envoi de fonds entre utilisateurs (ami, famille, collègue)</div><div class="play-seg b2c">B2C</div></div>
-    <div class="play-card"><div class="play-idx">13</div><div class="play-name">Code Marchand</div><div class="play-desc">Alternative QR pour urgences ou situations sans smartphone</div><div class="play-seg b2c">B2C</div></div>
-    <div class="play-card"><div class="play-idx">14</div><div class="play-name">Stations Partenaires</div><div class="play-desc">Réseau étendu: Afriquia, OLA Energy, et autres</div><div class="play-seg b2b">B2B</div></div>
-    <div class="play-card"><div class="play-idx">15</div><div class="play-name">Services Additionnels</div><div class="play-desc">Lavage, boutique, air comprimé payables via l'app</div><div class="play-seg b2b">B2B</div></div>
-    <div class="play-card"><div class="play-idx">16</div><div class="play-name">Auto-Recharge</div><div class="play-desc">Abonnement automatique rechargeable à intervalles définis</div><div class="play-seg b2c">B2C</div></div>
-    <div class="play-card"><div class="play-idx">17</div><div class="play-name">Paiement Groupé</div><div class="play-desc">Portefeuille partagé pour ONG, association, équipe de travail</div><div class="play-seg b2b">B2B</div></div>
-    <div class="play-card"><div class="play-idx">18</div><div class="play-name">Mineur Supervisé</div><div class="play-desc">Contrôles parentaux stricts, notifications temps réel</div><div class="play-seg b2c">B2C</div></div>
-    <div class="play-card"><div class="play-idx">19</div><div class="play-name">Assurance Auto</div><div class="play-desc">Réductions basées sur le comportement de conduite</div><div class="play-seg b2b">B2B</div></div>
-    <div class="play-card"><div class="play-idx">20</div><div class="play-name">Paiement Biométrique</div><div class="play-desc">Reconnaissance faciale / empreinte pour paiement ultra-rapide</div><div class="play-seg b2c">B2C</div></div>
-    <div class="play-card" style="border-left:2px solid rgba(241,110,0,0.4);background:rgba(241,110,0,0.03)"><div class="play-idx" style="color:rgba(241,110,0,0.15)">21</div><div class="play-name">Compte Franchisé Total</div><div class="play-desc">Propriétaire de station : suivi temps réel des transactions + reversement automatique de sa commission</div><div class="play-seg b2b" style="color:var(--te-orange)">FRANCHISÉ</div></div>
-  </div>
-</section>
-
-<!-- TECH STACK -->
-<section id="tech" class="tech-section">
-  <span class="section-label">Architecture Technique</span>
-  <h2 class="section-title">Stack éprouvé. Scalable à l'infini.</h2>
-  <div class="tech-cols reveal">
-    <div>
-      <div class="tech-group"><div class="tech-group-title">Frontend Mobile</div><div class="tech-items"><span class="tech-chip">React Native</span><span class="tech-chip">Flutter</span><span class="tech-chip">iOS / Android</span><span class="tech-chip">ZXing QR Scanner</span><span class="tech-chip">MLKit</span></div></div>
-      <div class="tech-group"><div class="tech-group-title">Backend & Base de données</div><div class="tech-items"><span class="tech-chip">Node.js</span><span class="tech-chip">Python</span><span class="tech-chip">GraphQL / REST</span><span class="tech-chip">PostgreSQL</span><span class="tech-chip">Redis</span><span class="tech-chip">MySQL</span></div></div>
-      <div class="tech-group"><div class="tech-group-title">Passerelles de Paiement</div><div class="tech-items"><span class="tech-chip">Chipdeals</span><span class="tech-chip">YengaPay</span><span class="tech-chip">Stripe</span><span class="tech-chip">Paystack</span><span class="tech-chip">Orange Money API</span><span class="tech-chip">Moov Money</span></div></div>
-      <div class="tech-group"><div class="tech-group-title">Sécurité & Conformité</div><div class="tech-items"><span class="tech-chip">HTTPS / TLS 1.3</span><span class="tech-chip">OAuth 2.0</span><span class="tech-chip">JWT</span><span class="tech-chip">PCI-DSS</span><span class="tech-chip">AML / KYC</span></div></div>
-      <div class="tech-group"><div class="tech-group-title">Cloud & Monitoring</div><div class="tech-items"><span class="tech-chip">AWS / GCP / Azure</span><span class="tech-chip">Firebase FCM</span><span class="tech-chip">Twilio SMS</span><span class="tech-chip">Datadog</span><span class="tech-chip">OWASP ZAP</span></div></div>
-    </div>
-    <div>
-      <div class="arch-diagram">
-        <div class="chart-box-title" style="margin-bottom:1.5rem">Architecture Cloud-Native</div>
-        <div class="arch-layer"><span class="arch-layer-icon">📱</span><div><div class="arch-layer-name">Application Mobile (iOS / Android)</div><div class="arch-layer-desc">React Native · Flutter · QR Scanner · Biométrie</div></div></div>
-        <span class="arch-arrow">↕</span>
-        <div class="arch-layer"><span class="arch-layer-icon">⚙️</span><div><div class="arch-layer-name">API Gateway + Load Balancer</div><div class="arch-layer-desc">Nginx / Kong · Auth OAuth 2.0 · Rate Limiting</div></div></div>
-        <span class="arch-arrow">↕</span>
-        <div class="arch-layer"><span class="arch-layer-icon">🖥️</span><div><div class="arch-layer-name">Backend Services (Node.js / Python)</div><div class="arch-layer-desc">User · Wallet · Transaction · Payment · Notification</div></div></div>
-        <span class="arch-arrow">↕</span>
-        <div class="arch-layer"><span class="arch-layer-icon">🗄️</span><div><div class="arch-layer-name">Data Layer</div><div class="arch-layer-desc">PostgreSQL · Redis Cache · Réplication multi-région</div></div></div>
-        <span class="arch-arrow">↕</span>
-        <div class="arch-layer"><span class="arch-layer-icon">💸</span><div><div class="arch-layer-name">Passerelles de Paiement</div><div class="arch-layer-desc">Chipdeals · YengaPay · Stripe · Paystack · Mobile Money</div></div></div>
-        <span class="arch-arrow">↕</span>
-        <div class="arch-layer" style="border-color:rgba(241,110,0,0.25);background:rgba(241,110,0,0.03)"><span class="arch-layer-icon">🔧</span><div><div class="arch-layer-name">App Pompiste TotalEnergies (Station)</div><div class="arch-layer-desc">Scanner QR dédié · Validation transaction · Interface simplifiée</div></div></div>
-      </div>
-    </div>
-  </div>
-</section>
-
-<!-- FRANCHISÉS / PARTENAIRES -->
-<section id="partenaires" class="franchise-section">
-  <span class="section-label">Espace Franchisés TotalEnergies</span>
-  <h2 class="section-title">Un compte dédié pour chaque station.</h2>
-
-  <div class="franchise-intro reveal">
-    <div>
-      <p class="franchise-desc">
-        Chaque <strong>propriétaire d'une licence TotalEnergies au Burkina Faso</strong> — Ouagadougou, Bobo-Dioulasso et au-delà — reçoit automatiquement un <strong>compte franchisé BarkaPay</strong> lors de l'onboarding de sa station sur la plateforme.
+    <!-- PROBLÈME -->
+    <section id="concept" class="problem-section">
+      <div class="s-tag">Le Problème</div>
+      <h2 class="s-title">Les stations burkinabè <em>en 2026</em></h2>
+      <p class="s-sub">
+        Le réseau TotalEnergies Burkina fonctionne encore principalement en
+        cash. Trois problèmes majeurs, un seul fix.
       </p>
-      <br>
-      <p class="franchise-desc">
-        Ce compte lui permet de <strong>suivre en temps réel</strong> toutes les transactions effectuées à sa station, de consulter ses <strong>revenus journaliers, hebdomadaires et mensuels</strong>, et de recevoir sa <strong>part des frais de transaction</strong> via reversement automatique sur son compte Mobile Money ou bancaire.
-      </p>
-      <br>
-      <p class="franchise-desc">
-        Le franchisé n'a pas besoin d'intervenir : tout est <strong>automatisé, transparent et auditable</strong>. Il garde un contrôle total sur son activité depuis son smartphone.
-      </p>
-    </div>
-    <div class="franchise-highlight">
-      <div class="franchise-highlight-title">⛽ Pourquoi c'est stratégique pour Total</div>
-      <p>Les franchisés TotalEnergies Burkina ont investi pour obtenir leur licence et construire leur station. Ils ont besoin d'une <strong style="color:var(--white)">visibilité financière claire</strong> sur leur activité et d'outils modernes de gestion.</p>
-      <p>En leur offrant un tableau de bord dédié + reversement automatique, BarkaPay devient <strong style="color:var(--white)">indispensable à leur gestion quotidienne</strong> — ce qui garantit leur adhésion au système et renforce la <strong style="color:var(--white)">fidélité au réseau TotalEnergies</strong>.</p>
-      <p style="margin-top:0.8rem;font-size:0.82rem;color:var(--te-orange)">→ Modèle de partage : ~0.3% reversé au franchisé + 0.3% reversé à TotalEnergies sur chaque transaction.</p>
-    </div>
-  </div>
-
-  <!-- 6 features franchisé -->
-  <div class="franchise-grid reveal">
-    <div class="franchise-card">
-      <span class="fc-icon">📊</span>
-      <div class="fc-title">Tableau de Bord Station</div>
-      <div class="fc-desc">Vue consolidée de toutes les transactions de la station — par pompiste, par heure, par jour. Historique complet exportable.</div>
-      <div class="fc-tags"><span class="fc-tag">Temps réel</span><span class="fc-tag">Export PDF/CSV</span></div>
-    </div>
-    <div class="franchise-card">
-      <span class="fc-icon">💰</span>
-      <div class="fc-title">Reversement Automatique</div>
-      <div class="fc-desc">La part du franchisé (~0.3% par transaction) est calculée automatiquement et reversée hebdomadairement sur son compte Mobile Money ou bancaire.</div>
-      <div class="fc-tags"><span class="fc-tag">Automatique</span><span class="fc-tag">Hebdomadaire</span></div>
-    </div>
-    <div class="franchise-card">
-      <span class="fc-icon">📈</span>
-      <div class="fc-title">Suivi des Entrées & Sorties</div>
-      <div class="fc-desc">Chaque flux financier est tracé — montant encaissé, frais prélevés, commission reversée. Aucune opacité. Tout est auditable.</div>
-      <div class="fc-tags"><span class="fc-tag">Transparence</span><span class="fc-tag">Auditabilité</span></div>
-    </div>
-    <div class="franchise-card">
-      <span class="fc-icon">👷</span>
-      <div class="fc-title">Gestion des Pompistes</div>
-      <div class="fc-desc">Le franchisé crée les comptes de ses pompistes, suit leurs performances individuelles et peut désactiver un compte en un clic.</div>
-      <div class="fc-tags"><span class="fc-tag">Multi-pompistes</span><span class="fc-tag">Contrôle accès</span></div>
-    </div>
-    <div class="franchise-card">
-      <span class="fc-icon">🔔</span>
-      <div class="fc-title">Alertes & Notifications</div>
-      <div class="fc-desc">Alerte en cas de transaction suspecte, de dépassement de seuil ou d'anomalie. Le franchisé est notifié instantanément par SMS et push.</div>
-      <div class="fc-tags"><span class="fc-tag">SMS + Push</span><span class="fc-tag">Anti-fraude</span></div>
-    </div>
-    <div class="franchise-card">
-      <span class="fc-icon">📋</span>
-      <div class="fc-title">Rapports Financiers</div>
-      <div class="fc-desc">Rapports journaliers, hebdomadaires et mensuels générés automatiquement. Idéal pour la comptabilité et les déclarations fiscales locales.</div>
-      <div class="fc-tags"><span class="fc-tag">Compta-ready</span><span class="fc-tag">Fiscalité locale</span></div>
-    </div>
-  </div>
-
-  <!-- Dashboard mockup -->
-  <div class="franchise-dashboard reveal">
-    <div class="fd-header">
-      <div class="fd-header-title">⛽ Station TotalEnergies — Ouaga 2000 / Secteur 15 · Tableau de Bord Franchisé</div>
-      <div class="fd-header-badge">● En ligne</div>
-    </div>
-    <div class="fd-body">
-      <div class="fd-kpis">
-        <div class="fd-kpi">
-          <div class="fd-kpi-val">2.8<span class="ku">M FCFA</span></div>
-          <div class="fd-kpi-label">Encaissé aujourd'hui</div>
+      <div class="problem-grid stagger">
+        <div class="prob-card">
+          <div class="prob-num">01</div>
+          <div class="prob-title">Sécurité des pompistes</div>
+          <div class="prob-desc">
+            Des milliers de FCFA manipulés physiquement chaque jour. Vols,
+            erreurs de caisse, conflits clients — une réalité quotidienne.
+          </div>
         </div>
-        <div class="fd-kpi">
-          <div class="fd-kpi-val">180</div>
-          <div class="fd-kpi-label">Transactions / jour</div>
+        <div class="prob-card">
+          <div class="prob-num">02</div>
+          <div class="prob-title">Trésorerie opaque</div>
+          <div class="prob-desc">
+            Aucune visibilité en temps réel pour le siège. Réconciliation
+            manuelle en J+2. Données clients inexistantes.
+          </div>
         </div>
-        <div class="fd-kpi">
-          <div class="fd-kpi-val">84<span class="ku">K FCFA</span></div>
-          <div class="fd-kpi-label">Commission ce mois</div>
-        </div>
-        <div class="fd-kpi">
-          <div class="fd-kpi-val">4</div>
-          <div class="fd-kpi-label">Pompistes actifs</div>
+        <div class="prob-card">
+          <div class="prob-num">03</div>
+          <div class="prob-title">Expérience client dépassée</div>
+          <div class="prob-desc">
+            Files d'attente, monnaie incorrecte, aucun programme fidélité. Le
+            client de 2026 attend mieux.
+          </div>
         </div>
       </div>
-      <table class="fd-table">
+    </section>
+
+    <div class="divider"></div>
+
+    <!-- HOW IT WORKS -->
+    <section class="how-section">
+      <div class="s-tag">Comment ça marche</div>
+      <h2 class="s-title">6 étapes. <em>30 secondes.</em></h2>
+      <p class="s-sub">
+        Du téléchargement au plein — aucune espèce, aucune attente, aucune
+        erreur.
+      </p>
+      <div class="steps reveal">
+        <div class="step-connector"></div>
+        <div class="step">
+          <div class="step-icon">📱</div>
+          <div class="step-title">Inscription</div>
+          <div class="step-desc">Numéro de téléphone, OTP</div>
+        </div>
+        <div class="step">
+          <div class="step-icon">💳</div>
+          <div class="step-title">Recharge</div>
+          <div class="step-desc">Orange Money, Moov, Visa</div>
+        </div>
+        <div class="step">
+          <div class="step-icon">⛽</div>
+          <div class="step-title">À la station</div>
+          <div class="step-desc">Sélectionner pompe + carburant</div>
+        </div>
+        <div class="step">
+          <div class="step-icon">📲</div>
+          <div class="step-title">QR Code</div>
+          <div class="step-desc">QR dynamique unique généré</div>
+        </div>
+        <div class="step">
+          <div class="step-icon">🔍</div>
+          <div class="step-title">Scan pompiste</div>
+          <div class="step-desc">App dédiée + saisie montant</div>
+        </div>
+        <div class="step">
+          <div class="step-icon">✅</div>
+          <div class="step-title">Débit instantané</div>
+          <div class="step-desc">Notification + reçu automatique</div>
+        </div>
+      </div>
+    </section>
+
+    <div class="divider-gold"></div>
+
+    <!-- AVANTAGE PÉTROLIER -->
+    <section id="avantage" class="avantage-section">
+      <div class="s-tag">Avantage Pétrolier</div>
+      <h2 class="s-title">Ce que Total <em>gagne.</em></h2>
+      <p class="s-sub">
+        Au-delà du paiement — une transformation opérationnelle réelle pour le
+        réseau burkinabè.
+      </p>
+      <div class="av-grid stagger">
+        <div class="av-card">
+          <span class="av-icon">🛡️</span>
+          <div class="av-title">Zéro Cash — <em>Sécurité Pompistes</em></div>
+          <div class="av-desc">
+            Le pompiste ne touche plus d'espèces. Fin des vols de caisse,
+            erreurs et conflits. BarkaPay crée un environnement de travail
+            sécurisé sans modifier l'infrastructure.
+          </div>
+          <div class="av-kpis">
+            <div>
+              <div class="av-kpi-val">-85%</div>
+              <div class="av-kpi-label">Incidents caisse</div>
+            </div>
+            <div>
+              <div class="av-kpi-val">0 FCFA</div>
+              <div class="av-kpi-label">Cash manipulé</div>
+            </div>
+          </div>
+        </div>
+        <div class="av-card">
+          <span class="av-icon">💹</span>
+          <div class="av-title">Flux de Trésorerie <em>Unifiés</em></div>
+          <div class="av-desc">
+            Tous les encaissements centralisés en temps réel. Réconciliation
+            automatique. Rapports prêts pour audit. Le cycle cash-to-bank passe
+            de J+2 à instantané.
+          </div>
+          <div class="av-kpis">
+            <div>
+              <div class="av-kpi-val">J+0</div>
+              <div class="av-kpi-label">Réconciliation</div>
+            </div>
+            <div>
+              <div class="av-kpi-val">-60%</div>
+              <div class="av-kpi-label">Coûts gestion cash</div>
+            </div>
+          </div>
+        </div>
+        <div class="av-card">
+          <span class="av-icon">🧠</span>
+          <div class="av-title">Base Client <em>Unifiée</em></div>
+          <div class="av-desc">
+            Profil client structuré à chaque transaction. Fréquence, volume,
+            heures de pointe par station. Des données qui alimentent la
+            politique commerciale et les négociations fournisseurs.
+          </div>
+          <div class="av-kpis">
+            <div>
+              <div class="av-kpi-val">500K</div>
+              <div class="av-kpi-label">Profils An.1</div>
+            </div>
+            <div>
+              <div class="av-kpi-val">360°</div>
+              <div class="av-kpi-label">Vue client</div>
+            </div>
+          </div>
+        </div>
+        <div class="av-card">
+          <span class="av-icon">⛽</span>
+          <div class="av-title">Réseau de Pompes <em>Connecté</em></div>
+          <div class="av-desc">
+            Chaque pompe devient un point d'encaissement digital identifié.
+            Visibilité totale du réseau Ouagadougou et Bobo-Dioulasso.
+            Déploiement en moins de 72h par station.
+          </div>
+          <div class="av-kpis">
+            <div>
+              <div class="av-kpi-val">&lt;72h</div>
+              <div class="av-kpi-label">Déploiement / station</div>
+            </div>
+            <div>
+              <div class="av-kpi-val">0</div>
+              <div class="av-kpi-label">Infra à installer</div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <div class="divider"></div>
+
+    <!-- STATIONS -->
+    <section class="stations-section">
+      <div class="s-tag">Réseau de Déploiement</div>
+      <h2 class="s-title">Ouagadougou <em>d'abord.</em> Bobo ensuite.</h2>
+      <p class="s-sub">
+        Phase 1 sur le grand réseau de la capitale, Phase 2 sur Bobo-Dioulasso,
+        puis expansion UEMOA.
+      </p>
+      <div class="station-grid stagger">
+        <div class="station-card">
+          <div class="station-city">
+            <div class="city-dot"></div>
+            Ouagadougou
+          </div>
+          <div class="station-name">
+            Station Total — Secteur 15 / Ouaga 2000
+          </div>
+          <div class="station-nums">
+            <div>
+              <div class="sn-val">2.8M</div>
+              <div class="sn-label">FCFA / jour</div>
+            </div>
+            <div>
+              <div class="sn-val">180</div>
+              <div class="sn-label">Txn / jour</div>
+            </div>
+          </div>
+          <span class="station-badge badge-live">● Phase 1 · Live</span>
+        </div>
+        <div class="station-card">
+          <div class="station-city">
+            <div class="city-dot"></div>
+            Ouagadougou
+          </div>
+          <div class="station-name">
+            Station Total — Karpala / Zone Industrielle
+          </div>
+          <div class="station-nums">
+            <div>
+              <div class="sn-val">3.5M</div>
+              <div class="sn-label">FCFA / jour</div>
+            </div>
+            <div>
+              <div class="sn-val">220</div>
+              <div class="sn-label">Txn / jour</div>
+            </div>
+          </div>
+          <span class="station-badge badge-live">● Phase 1 · Live</span>
+        </div>
+        <div class="station-card">
+          <div class="station-city">
+            <div class="city-dot"></div>
+            Ouagadougou
+          </div>
+          <div class="station-name">Station Total — Secteur 22 / Pissy</div>
+          <div class="station-nums">
+            <div>
+              <div class="sn-val">1.9M</div>
+              <div class="sn-label">FCFA / jour</div>
+            </div>
+            <div>
+              <div class="sn-val">145</div>
+              <div class="sn-label">Txn / jour</div>
+            </div>
+          </div>
+          <span class="station-badge badge-live">● Phase 1 · Live</span>
+        </div>
+        <div class="station-card">
+          <div class="station-city">
+            <div class="city-dot" style="background: var(--gold)"></div>
+            Bobo-Dioulasso
+          </div>
+          <div class="station-name">Station Total — Hamdallaye</div>
+          <div class="station-nums">
+            <div>
+              <div class="sn-val">2.1M</div>
+              <div class="sn-label">FCFA / jour</div>
+            </div>
+            <div>
+              <div class="sn-val">160</div>
+              <div class="sn-label">Txn / jour</div>
+            </div>
+          </div>
+          <span class="station-badge badge-soon">◎ Phase 2 · Q3 2026</span>
+        </div>
+        <div class="station-card">
+          <div class="station-city">
+            <div class="city-dot" style="background: var(--gold)"></div>
+            Bobo-Dioulasso
+          </div>
+          <div class="station-name">Station Total — Koko / Dioulassoba</div>
+          <div class="station-nums">
+            <div>
+              <div class="sn-val">1.7M</div>
+              <div class="sn-label">FCFA / jour</div>
+            </div>
+            <div>
+              <div class="sn-val">130</div>
+              <div class="sn-label">Txn / jour</div>
+            </div>
+          </div>
+          <span class="station-badge badge-soon">◎ Phase 2 · Q3 2026</span>
+        </div>
+        <div class="station-card add">
+          <div class="station-add-icon">+</div>
+          <div class="station-add-label">Expansion UEMOA</div>
+          <div class="station-add-sub">
+            Sénégal · Côte d'Ivoire · Mali<br />Phase 3 — 2027
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <div class="divider-gold"></div>
+
+    <!-- CHARTS -->
+    <section class="charts-section">
+      <div class="s-tag">Projections Financières</div>
+      <h2 class="s-title">40.6 Mds → <em>462 Mds FCFA</em></h2>
+      <p class="s-sub">
+        En 3 ans. Marge brute au-dessus de 96%. Rentable dès l'Année 1.
+      </p>
+      <div class="charts-tabs">
+        <button class="tab-btn active" onclick="switchTab('t-rev', this)">
+          Revenus
+        </button>
+        <button class="tab-btn" onclick="switchTab('t-usr', this)">
+          Utilisateurs
+        </button>
+        <button class="tab-btn" onclick="switchTab('t-pro', this)">
+          Rentabilité
+        </button>
+        <button class="tab-btn" onclick="switchTab('t-roi', this)">ROI</button>
+      </div>
+      <div id="t-rev" class="chart-panel active reveal">
+        <div class="chart-box">
+          <div class="chart-title">Revenus sur 3 ans (Mds FCFA)</div>
+          <canvas id="cRevenue"></canvas>
+        </div>
+        <div class="chart-box">
+          <div class="chart-title">Marge Brute (%)</div>
+          <canvas id="cMargin"></canvas>
+        </div>
+        <div class="chart-box">
+          <div class="chart-title">Volume Transactions (M/mois)</div>
+          <canvas id="cTxn"></canvas>
+        </div>
+        <div class="chart-box">
+          <div class="chart-title">Répartition Revenus An.1</div>
+          <canvas id="cBreak"></canvas>
+        </div>
+      </div>
+      <div id="t-usr" class="chart-panel single reveal">
+        <div class="chart-box">
+          <div class="chart-title">
+            Croissance Utilisateurs Actifs — 36 Mois (K)
+          </div>
+          <canvas id="cUsers" style="max-height: 300px"></canvas>
+        </div>
+      </div>
+      <div id="t-pro" class="chart-panel single reveal">
+        <div class="chart-box">
+          <div class="chart-title">
+            Revenus vs Coûts vs Bénéfice Net (Mds FCFA)
+          </div>
+          <canvas id="cProfit" style="max-height: 300px"></canvas>
+        </div>
+      </div>
+      <div id="t-roi" class="chart-panel single reveal">
+        <div class="chart-box">
+          <div class="chart-title">Retour sur Investissement (%)</div>
+          <canvas id="cROI" style="max-height: 300px"></canvas>
+        </div>
+      </div>
+    </section>
+
+    <!-- FINANCES TABLE -->
+    <section class="finance-section">
+      <div class="s-tag">Modèle Économique</div>
+      <h2 class="s-title">Quatre sources. <em>Un empire.</em></h2>
+      <table class="fin-table reveal">
         <thead>
-          <tr><th>Transaction</th><th>Pompiste</th><th>Montant</th><th>Frais client</th><th>Votre part</th><th>Statut</th></tr>
+          <tr>
+            <th>Source</th>
+            <th>Taux</th>
+            <th>Année 1</th>
+            <th>Année 2</th>
+            <th>Année 3</th>
+          </tr>
         </thead>
         <tbody>
-          <tr><td>TXN-00847 · 08h14</td><td>Moussa K.</td><td>25 000 FCFA</td><td>375 FCFA</td><td class="positive">+75 FCFA</td><td class="positive">✓ Confirmé</td></tr>
-          <tr><td>TXN-00846 · 07h52</td><td>Issa T.</td><td>40 000 FCFA</td><td>600 FCFA</td><td class="positive">+120 FCFA</td><td class="positive">✓ Confirmé</td></tr>
-          <tr><td>TXN-00845 · 07h31</td><td>Moussa K.</td><td>15 000 FCFA</td><td>225 FCFA</td><td class="positive">+45 FCFA</td><td class="positive">✓ Confirmé</td></tr>
-          <tr><td>TXN-00844 · 07h09</td><td>Aminata S.</td><td>60 000 FCFA</td><td>900 FCFA</td><td class="pending">+180 FCFA</td><td class="pending">⏳ Reversement J+7</td></tr>
+          <tr class="hl">
+            <td>🔄 Frais de Transaction</td>
+            <td>1.5%</td>
+            <td>26.2 Mds</td>
+            <td>106.1 Mds</td>
+            <td>298.4 Mds</td>
+          </tr>
+          <tr>
+            <td>💳 Frais de Recharge</td>
+            <td>0.75%</td>
+            <td>13.1 Mds</td>
+            <td>53.1 Mds</td>
+            <td>149.1 Mds</td>
+          </tr>
+          <tr>
+            <td>⭐ Services Premium B2B</td>
+            <td>Abonnement</td>
+            <td>983 M</td>
+            <td>5.3 Mds</td>
+            <td>11.1 Mds</td>
+          </tr>
+          <tr>
+            <td>📈 Revenus d'Intérêts</td>
+            <td>Variable</td>
+            <td>328 M</td>
+            <td>4.5 Mds</td>
+            <td>3.7 Mds</td>
+          </tr>
+          <tr class="total">
+            <td>TOTAL</td>
+            <td>—</td>
+            <td class="up">40.6 Mds</td>
+            <td class="up">169 Mds</td>
+            <td class="up">462 Mds</td>
+          </tr>
         </tbody>
       </table>
-    </div>
-  </div>
-
-  <!-- Flux de reversement -->
-  <div style="margin-top:3.5rem" class="reveal">
-    <span class="section-label">Flux de Reversement</span>
-    <h3 style="font-family:'Syne',sans-serif;font-weight:800;font-size:1.4rem;letter-spacing:-0.03em;margin-bottom:2rem">Comment circule l'argent ?</h3>
-    <div class="revenue-flow">
-      <div class="flow-node">
-        <div class="flow-node-icon">👤</div>
-        <div class="flow-node-label">Client</div>
-        <div class="flow-node-sub">Paye 25 000 FCFA</div>
+      <div class="fin-cards reveal">
+        <div class="fin-card">
+          <div class="fin-card-title">Budget MVP</div>
+          <div class="fin-row">
+            <span class="fin-label">Développement</span
+            ><span class="fin-val">32.8 M FCFA</span>
+          </div>
+          <div class="fin-row">
+            <span class="fin-label">Infrastructure Cloud</span
+            ><span class="fin-val">6.6 M FCFA</span>
+          </div>
+          <div class="fin-row">
+            <span class="fin-label">Marketing Lancement</span
+            ><span class="fin-val">32.8 M FCFA</span>
+          </div>
+          <div class="fin-row">
+            <span class="fin-label">Conformité / Légal</span
+            ><span class="fin-val">13.1 M FCFA</span>
+          </div>
+          <div class="fin-row">
+            <span class="fin-label">Total MVP</span
+            ><span class="fin-val gold">97.3 M FCFA</span>
+          </div>
+        </div>
+        <div class="fin-card">
+          <div class="fin-card-title">KPIs Techniques An.1</div>
+          <div class="fin-row">
+            <span class="fin-label">Disponibilité SLA</span
+            ><span class="fin-val green">99.9%</span>
+          </div>
+          <div class="fin-row">
+            <span class="fin-label">Temps de réponse</span
+            ><span class="fin-val green">&lt;500ms</span>
+          </div>
+          <div class="fin-row">
+            <span class="fin-label">Rétention</span
+            ><span class="fin-val green">70%</span>
+          </div>
+          <div class="fin-row">
+            <span class="fin-label">Paiement en</span
+            ><span class="fin-val green">&lt;30 sec</span>
+          </div>
+          <div class="fin-row">
+            <span class="fin-label">Rollback max</span
+            ><span class="fin-val gold">15 min</span>
+          </div>
+        </div>
+        <div class="fin-card">
+          <div class="fin-card-title">KPIs Métier An.1</div>
+          <div class="fin-row">
+            <span class="fin-label">Utilisateurs actifs</span
+            ><span class="fin-val green">500 000</span>
+          </div>
+          <div class="fin-row">
+            <span class="fin-label">Transactions/mois</span
+            ><span class="fin-val green">2 000 000</span>
+          </div>
+          <div class="fin-row">
+            <span class="fin-label">Montant moyen/txn</span
+            ><span class="fin-val">19 600 FCFA</span>
+          </div>
+          <div class="fin-row">
+            <span class="fin-label">Pays couverts</span
+            ><span class="fin-val">6 UEMOA</span>
+          </div>
+          <div class="fin-row">
+            <span class="fin-label">ROI Année 1</span
+            ><span class="fin-val gold">3 826%</span>
+          </div>
+        </div>
       </div>
-      <div class="flow-arrow"><span>→</span><span class="flow-arrow-label">+1.5% frais</span></div>
-      <div class="flow-node">
-        <div class="flow-node-icon">📱</div>
-        <div class="flow-node-label">BarkaPay</div>
-        <div class="flow-node-sub">375 FCFA collectés</div>
+    </section>
+
+    <div class="divider"></div>
+
+    <!-- ROADMAP -->
+    <section class="roadmap-section">
+      <div class="s-tag">Feuille de Route</div>
+      <h2 class="s-title">MVP en <em>3 mois.</em> Leader en 18.</h2>
+      <p class="s-sub">
+        Quatre phases. Un objectif : dominer le paiement carburant en Afrique de
+        l'Ouest.
+      </p>
+      <div class="phases stagger">
+        <div class="phase">
+          <div class="phase-num-bg">1</div>
+          <span class="phase-tag">Phase 1 · MVP</span>
+          <div class="phase-title">Lancement Ouaga</div>
+          <div class="phase-period">Mois 0 → 3</div>
+          <ul class="phase-list">
+            <li>Inscription OTP, recharge Mobile Money</li>
+            <li>Paiement QR Code carburant</li>
+            <li>Gestion parentale basique</li>
+            <li>App pompiste + mode USSD</li>
+          </ul>
+          <div class="phase-budget">
+            <div class="phase-budget-val">97.3 M FCFA</div>
+            <div class="phase-budget-sub">Budget MVP</div>
+          </div>
+        </div>
+        <div class="phase">
+          <div class="phase-num-bg">2</div>
+          <span class="phase-tag">Phase 2 · Expansion</span>
+          <div class="phase-title">Bobo + B2B</div>
+          <div class="phase-period">Mois 4 → 9</div>
+          <ul class="phase-list">
+            <li>Recharge carte bancaire</li>
+            <li>Fidélité 4 niveaux (Bronze → Platine)</li>
+            <li>Gestion de flotte B2B</li>
+            <li>Compte franchisé Total + reversement</li>
+          </ul>
+          <div class="phase-budget">
+            <div class="phase-budget-val">65–130 M FCFA</div>
+            <div class="phase-budget-sub">Budget Phase 2</div>
+          </div>
+        </div>
+        <div class="phase">
+          <div class="phase-num-bg">3</div>
+          <span class="phase-tag">Phase 3 · Intégration</span>
+          <div class="phase-title">Réseau UEMOA</div>
+          <div class="phase-period">Mois 10 → 18</div>
+          <ul class="phase-list">
+            <li>Stations partenaires (Afriquia, OLA)</li>
+            <li>Score conducteur + assurance</li>
+            <li>Expansion 6 pays UEMOA</li>
+            <li>Parrainage viral FCFA automatisé</li>
+          </ul>
+          <div class="phase-budget">
+            <div class="phase-budget-val">130–260 M FCFA</div>
+            <div class="phase-budget-sub">Budget Phase 3</div>
+          </div>
+        </div>
+        <div class="phase">
+          <div class="phase-num-bg">4</div>
+          <span class="phase-tag">Phase 4 · Domination</span>
+          <div class="phase-title">Leader Afrique</div>
+          <div class="phase-period">Mois 19+</div>
+          <ul class="phase-list">
+            <li>Paiement biométrique (Face ID)</li>
+            <li>Micro-crédit carburant différé</li>
+            <li>Électricité, eau, mobile intégrés</li>
+            <li>5M utilisateurs, leader continental</li>
+          </ul>
+          <div class="phase-budget">
+            <div class="phase-budget-val">260 M FCFA+</div>
+            <div class="phase-budget-sub">Budget Phase 4</div>
+          </div>
+        </div>
       </div>
-      <div class="flow-arrow"><span>→</span><span class="flow-arrow-label">répartition auto</span></div>
-      <div class="flow-node highlighted">
-        <div class="flow-node-icon">🏗️</div>
-        <div class="flow-node-label">Franchisé Total</div>
-        <div class="flow-node-sub">+75 FCFA (0.3%)</div>
+    </section>
+
+    <div class="divider-gold"></div>
+
+    <!-- FEATURES -->
+    <section class="features-section">
+      <div class="s-tag">Fonctionnalités Clés</div>
+      <h2 class="s-title">Une app. <em>Tout.</em></h2>
+      <p class="s-sub">
+        Du particulier à la flotte d'entreprise — chaque cas d'usage couvert.
+      </p>
+      <div class="feat-grid stagger">
+        <div class="feat-card">
+          <span class="feat-icon">📱</span>
+          <div class="feat-name">Portefeuille Numérique</div>
+          <div class="feat-desc">
+            Rechargeable via Orange Money, Moov, MTN, Visa. Solde et historique
+            en temps réel.
+          </div>
+          <span class="feat-tag">Multi-devises</span>
+        </div>
+        <div class="feat-card">
+          <span class="feat-icon">📲</span>
+          <div class="feat-name">Paiement QR Dynamique</div>
+          <div class="feat-desc">
+            QR unique par transaction. Durée limitée, impossible à réutiliser.
+            Sécurité bancaire.
+          </div>
+          <span class="feat-tag">Sécurisé</span>
+        </div>
+        <div class="feat-card">
+          <span class="feat-icon">👨‍👧</span>
+          <div class="feat-name">Gestion Parentale</div>
+          <div class="feat-desc">
+            Recharge à distance, limites de dépenses, alertes instantanées.
+            Contrôle total.
+          </div>
+          <span class="feat-tag">Contrôle parental</span>
+        </div>
+        <div class="feat-card">
+          <span class="feat-icon">🏢</span>
+          <div class="feat-name">Flotte B2B</div>
+          <div class="feat-desc">
+            Dashboard centralisé par véhicule / conducteur. Rapports analytiques
+            exportables.
+          </div>
+          <span class="feat-tag">B2B Analytics</span>
+        </div>
+        <div class="feat-card">
+          <span class="feat-icon">🏆</span>
+          <div class="feat-name">Programme de Fidélité</div>
+          <div class="feat-desc">
+            Points à chaque plein. 4 niveaux. Réductions automatiques et
+            services premium.
+          </div>
+          <span class="feat-tag">Bronze → Platine</span>
+        </div>
+        <div class="feat-card">
+          <span class="feat-icon">📵</span>
+          <div class="feat-name">Mode USSD Hors-Ligne</div>
+          <div class="feat-desc">
+            Fonctionne sans internet via *#BARKA#. Token SMS valable 10 min.
+            Zéro exclusion.
+          </div>
+          <span class="feat-tag">Zones rurales</span>
+        </div>
+        <div class="feat-card">
+          <span class="feat-icon">🏗️</span>
+          <div class="feat-name">Espace Franchisé Total</div>
+          <div class="feat-desc">
+            Suivi des transactions et reversement automatique de commission pour
+            chaque station.
+          </div>
+          <span class="feat-tag">Reversement Auto</span>
+        </div>
+        <div class="feat-card">
+          <span class="feat-icon">⛽</span>
+          <div class="feat-name">Prix Carburant Live</div>
+          <div class="feat-desc">
+            Prix du litre géolocalisé en temps réel. Comparaison stations,
+            réservation créneau.
+          </div>
+          <span class="feat-tag">Géolocalisation</span>
+        </div>
+        <div class="feat-card">
+          <span class="feat-icon">🤝</span>
+          <div class="feat-name">Parrainage Cashback</div>
+          <div class="feat-desc">
+            500 FCFA de crédit parrain + 500 FCFA filleul dès le premier plein.
+            Croissance virale.
+          </div>
+          <span class="feat-tag">Viral Growth</span>
+        </div>
       </div>
-      <div class="flow-arrow"><span>+</span><span class="flow-arrow-label"></span></div>
-      <div class="flow-node highlighted">
-        <div class="flow-node-icon">⛽</div>
-        <div class="flow-node-label">TotalEnergies</div>
-        <div class="flow-node-sub">+75 FCFA (0.3%)</div>
+    </section>
+
+    <!-- FRANCHISÉ DASHBOARD -->
+    <section class="franchise-section">
+      <div class="s-tag">Espace Franchisé TotalEnergies</div>
+      <h2 class="s-title">Un compte pour <em>chaque station.</em></h2>
+      <p class="s-sub">
+        Chaque propriétaire de licence TotalEnergies au Burkina reçoit un
+        tableau de bord dédié et son reversement automatique chaque semaine.
+      </p>
+      <div class="fd-wrap reveal">
+        <div class="fd-head">
+          <div class="fd-head-title">
+            ⛽ Station Total — Ouaga 2000 / Secteur 15 · Tableau de Bord
+            Franchisé
+          </div>
+          <div class="fd-live">● En ligne</div>
+        </div>
+        <div class="fd-body">
+          <div class="fd-kpis">
+            <div class="fd-kpi">
+              <div class="fd-kpi-val">2.8<em>M FCFA</em></div>
+              <div class="fd-kpi-label">Encaissé aujourd'hui</div>
+            </div>
+            <div class="fd-kpi">
+              <div class="fd-kpi-val">180</div>
+              <div class="fd-kpi-label">Transactions / jour</div>
+            </div>
+            <div class="fd-kpi">
+              <div class="fd-kpi-val">84<em>K FCFA</em></div>
+              <div class="fd-kpi-label">Commission ce mois</div>
+            </div>
+            <div class="fd-kpi">
+              <div class="fd-kpi-val">4</div>
+              <div class="fd-kpi-label">Pompistes actifs</div>
+            </div>
+          </div>
+          <table class="fd-table">
+            <thead>
+              <tr>
+                <th>Transaction</th>
+                <th>Pompiste</th>
+                <th>Montant</th>
+                <th>Frais</th>
+                <th>Votre part</th>
+                <th>Statut</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td>TXN-00847 · 08h14</td>
+                <td>Moussa K.</td>
+                <td>25 000 FCFA</td>
+                <td>375 FCFA</td>
+                <td class="pos">+75 FCFA</td>
+                <td class="pos">✓ Confirmé</td>
+              </tr>
+              <tr>
+                <td>TXN-00846 · 07h52</td>
+                <td>Issa T.</td>
+                <td>40 000 FCFA</td>
+                <td>600 FCFA</td>
+                <td class="pos">+120 FCFA</td>
+                <td class="pos">✓ Confirmé</td>
+              </tr>
+              <tr>
+                <td>TXN-00845 · 07h31</td>
+                <td>Moussa K.</td>
+                <td>15 000 FCFA</td>
+                <td>225 FCFA</td>
+                <td class="pos">+45 FCFA</td>
+                <td class="pos">✓ Confirmé</td>
+              </tr>
+              <tr>
+                <td>TXN-00844 · 07h09</td>
+                <td>Aminata S.</td>
+                <td>60 000 FCFA</td>
+                <td>900 FCFA</td>
+                <td class="pend">+180 FCFA</td>
+                <td class="pend">⏳ Reversement J+7</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
       </div>
-      <div class="flow-arrow"><span>+</span><span class="flow-arrow-label"></span></div>
-      <div class="flow-node">
-        <div class="flow-node-icon">💼</div>
-        <div class="flow-node-label">BarkaPay App</div>
-        <div class="flow-node-sub">+225 FCFA (0.9%)</div>
+
+      <!-- Flux reversement -->
+      <div class="reveal" style="margin-top: 4rem">
+        <div class="s-tag">Flux de Reversement</div>
+        <h3
+          style="
+            font-family: &quot;Bebas Neue&quot;, sans-serif;
+            font-size: 1.8rem;
+            letter-spacing: 0.06em;
+            margin-bottom: 2rem;
+          "
+        >
+          Comment
+          <em style="color: var(--gold); font-style: normal"
+            >circule l'argent</em
+          >
+          ?
+        </h3>
+        <div class="flow-wrap">
+          <div class="flow-node">
+            <div class="flow-icon">👤</div>
+            <div class="flow-label">Client</div>
+            <div class="flow-sub">Paye 25 000 FCFA</div>
+          </div>
+          <div class="flow-arr">
+            <span>→</span><span class="flow-arr-label">+1.5% frais</span>
+          </div>
+          <div class="flow-node">
+            <div class="flow-icon">📱</div>
+            <div class="flow-label">BarkaPay</div>
+            <div class="flow-sub">375 FCFA collectés</div>
+          </div>
+          <div class="flow-arr">
+            <span>→</span><span class="flow-arr-label">répartition</span>
+          </div>
+          <div class="flow-node hl">
+            <div class="flow-icon">🏗️</div>
+            <div class="flow-label">Franchisé</div>
+            <div class="flow-sub" style="color: var(--gold)">
+              +75 FCFA (0.3%)
+            </div>
+          </div>
+          <div class="flow-arr"><span style="color: var(--muted)">+</span></div>
+          <div class="flow-node hl">
+            <div class="flow-icon">⛽</div>
+            <div class="flow-label">TotalEnergies</div>
+            <div class="flow-sub" style="color: var(--gold)">
+              +75 FCFA (0.3%)
+            </div>
+          </div>
+          <div class="flow-arr"><span style="color: var(--muted)">+</span></div>
+          <div class="flow-node">
+            <div class="flow-icon">💼</div>
+            <div class="flow-label">BarkaPay App</div>
+            <div class="flow-sub">+225 FCFA (0.9%)</div>
+          </div>
+        </div>
+        <p
+          style="
+            text-align: center;
+            font-size: 0.78rem;
+            color: var(--muted);
+            margin-top: 1.5rem;
+          "
+        >
+          Reversement automatique chaque semaine · Mobile Money ou virement
+          bancaire
+        </p>
       </div>
-    </div>
-    <p style="text-align:center;font-size:0.78rem;color:var(--gray);margin-top:1.5rem">Reversement automatique chaque semaine · Mobile Money ou virement bancaire · Historique complet dans l'app franchisé</p>
-  </div>
-</section>
+    </section>
 
-<!-- AVANTAGES DIFFÉRENCIANTS -->
-<section style="background:var(--navy);">
-  <span class="section-label">Avantages Différenciants</span>
-  <h2 class="section-title">Ce qui rend BarkaPay imbattable.</h2>
-  <p class="section-sub">Au-delà du paiement — des mécanismes pensés pour le marché burkinabè qui créent une adoption virale et une rétention durable.</p>
-  <div class="ideas-grid reveal">
+    <div class="divider"></div>
 
-    <div style="background:var(--navy-card);border:1px solid rgba(255,255,255,0.06);border-radius:var(--radius);padding:2rem;position:relative;overflow:hidden;">
-      <div style="position:absolute;top:1rem;right:1rem;font-size:0.65rem;letter-spacing:0.1em;text-transform:uppercase;background:rgba(80,190,135,0.1);color:var(--te-green);border:1px solid rgba(80,190,135,0.2);padding:0.2rem 0.5rem;border-radius:100px;">Acquisition virale</div>
-      <div style="font-size:2rem;margin-bottom:1rem;">🤝</div>
-      <div style="font-family:'Syne',sans-serif;font-weight:700;font-size:1rem;margin-bottom:0.7rem;">Parrainage FCFA Immédiat</div>
-      <div style="font-size:0.875rem;color:var(--gray);line-height:1.65;">Partage d'un code unique → 500 FCFA de crédit carburant pour le parrain ET le filleul dès le premier plein. Croissance organique explosive sur les marchés où le bouche-à-oreille est roi.</div>
-    </div>
+    <!-- TECH -->
+    <section class="tech-section">
+      <div class="s-tag">Architecture Technique</div>
+      <h2 class="s-title">Stack éprouvé. <em>Scalable.</em></h2>
+      <div class="tech-cols reveal">
+        <div>
+          <div class="tech-group">
+            <div class="tech-group-label">Frontend Mobile</div>
+            <div class="tech-chips">
+              <span class="tech-chip">React Native</span
+              ><span class="tech-chip">Flutter</span
+              ><span class="tech-chip">iOS / Android</span
+              ><span class="tech-chip">ZXing QR</span>
+            </div>
+          </div>
+          <div class="tech-group">
+            <div class="tech-group-label">Backend</div>
+            <div class="tech-chips">
+              <span class="tech-chip">Node.js</span
+              ><span class="tech-chip">Python</span
+              ><span class="tech-chip">GraphQL</span
+              ><span class="tech-chip">PostgreSQL</span
+              ><span class="tech-chip">Redis</span>
+            </div>
+          </div>
+          <div class="tech-group">
+            <div class="tech-group-label">Paiement</div>
+            <div class="tech-chips">
+              <span class="tech-chip">Chipdeals</span
+              ><span class="tech-chip">YengaPay</span
+              ><span class="tech-chip">Stripe</span
+              ><span class="tech-chip">Orange Money</span
+              ><span class="tech-chip">Moov Money</span>
+            </div>
+          </div>
+          <div class="tech-group">
+            <div class="tech-group-label">Sécurité</div>
+            <div class="tech-chips">
+              <span class="tech-chip">TLS 1.3</span
+              ><span class="tech-chip">OAuth 2.0</span
+              ><span class="tech-chip">JWT</span
+              ><span class="tech-chip">PCI-DSS</span
+              ><span class="tech-chip">KYC / AML</span>
+            </div>
+          </div>
+        </div>
+        <div>
+          <div class="arch-box">
+            <div class="chart-title" style="margin-bottom: 1.5rem">
+              Architecture Cloud-Native
+            </div>
+            <div class="arch-layer">
+              <span class="arch-layer-icon">📱</span>
+              <div>
+                <div class="arch-layer-name">
+                  Application Mobile (iOS / Android)
+                </div>
+                <div class="arch-layer-desc">
+                  React Native · QR Scanner · Biométrie
+                </div>
+              </div>
+            </div>
+            <span class="arch-arrow">↕</span>
+            <div class="arch-layer">
+              <span class="arch-layer-icon">⚙️</span>
+              <div>
+                <div class="arch-layer-name">API Gateway + Load Balancer</div>
+                <div class="arch-layer-desc">
+                  Auth OAuth 2.0 · Rate Limiting
+                </div>
+              </div>
+            </div>
+            <span class="arch-arrow">↕</span>
+            <div class="arch-layer">
+              <span class="arch-layer-icon">🖥️</span>
+              <div>
+                <div class="arch-layer-name">Backend Services</div>
+                <div class="arch-layer-desc">
+                  Wallet · Transaction · Notification
+                </div>
+              </div>
+            </div>
+            <span class="arch-arrow">↕</span>
+            <div class="arch-layer">
+              <span class="arch-layer-icon">🗄️</span>
+              <div>
+                <div class="arch-layer-name">Data Layer</div>
+                <div class="arch-layer-desc">
+                  PostgreSQL · Redis Cache · Multi-région
+                </div>
+              </div>
+            </div>
+            <span class="arch-arrow">↕</span>
+            <div
+              class="arch-layer"
+              style="
+                border-color: rgba(201, 168, 76, 0.25);
+                background: var(--gold-dim);
+              "
+            >
+              <span class="arch-layer-icon">🔧</span>
+              <div>
+                <div class="arch-layer-name">App Pompiste TotalEnergies</div>
+                <div class="arch-layer-desc">
+                  Scanner QR · Validation · Interface dédiée
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
 
-    <div style="background:var(--navy-card);border:1px solid rgba(255,255,255,0.06);border-radius:var(--radius);padding:2rem;position:relative;overflow:hidden;">
-      <div style="position:absolute;top:1rem;right:1rem;font-size:0.65rem;letter-spacing:0.1em;text-transform:uppercase;background:rgba(8,94,189,0.1);color:var(--te-blue);border:1px solid rgba(8,94,189,0.2);padding:0.2rem 0.5rem;border-radius:100px;">UX révolutionnaire</div>
-      <div style="font-size:2rem;margin-bottom:1rem;">⛽</div>
-      <div style="font-family:'Syne',sans-serif;font-weight:700;font-size:1rem;margin-bottom:0.7rem;">Prix Carburant Géolocalisé</div>
-      <div style="font-size:0.875rem;color:var(--gray);line-height:1.65;">L'app affiche en temps réel le prix du litre à chaque station TotalEnergies autour de l'utilisateur à Ouagadougou et Bobo. Comparaison instantanée, réservation de créneau, zéro surprise.</div>
-    </div>
+    <!-- CTA -->
+    <section id="cta" class="cta-section">
+      <div class="cta-glow"></div>
+      <div class="cta-inner reveal">
+        <h2 class="cta-title">
+          Digitalisons<br />le Burkina <em>ensemble.</em>
+        </h2>
+        <p class="cta-sub">
+          MVP en 3 mois · ROI 3826% · 500K utilisateurs · Ouagadougou +
+          Bobo-Dioulasso
+        </p>
+        <div class="cta-actions">
+          <button
+            class="btn-red"
+            onclick="
+              alert(
+                'Prenez contact avec le +22664502626 pour initier le partenariat BarkaPay × TotalEnergies Burkina Faso !',
+              )
+            "
+          >
+            Engager le Partenariat
+          </button>
+          <button
+            class="btn-ghost"
+            onclick="window.scrollTo({ top: 0, behavior: 'smooth' })"
+          >
+            Revoir la Présentation
+          </button>
+        </div>
+      </div>
+    </section>
 
-    <div style="background:var(--navy-card);border:1px solid rgba(255,255,255,0.06);border-radius:var(--radius);padding:2rem;position:relative;overflow:hidden;">
-      <div style="position:absolute;top:1rem;right:1rem;font-size:0.65rem;letter-spacing:0.1em;text-transform:uppercase;background:rgba(241,110,0,0.1);color:var(--te-orange);border:1px solid rgba(241,110,0,0.2);padding:0.2rem 0.5rem;border-radius:100px;">Rétention maximale</div>
-      <div style="font-size:2rem;margin-bottom:1rem;">📊</div>
-      <div style="font-family:'Syne',sans-serif;font-weight:700;font-size:1rem;margin-bottom:0.7rem;">Score Conducteur & Assurance</div>
-      <div style="font-size:0.875rem;color:var(--gray);line-height:1.65;">Chaque utilisateur accumule un "Score BarkaPay" basé sur ses habitudes de recharge. Ce score débloque des réductions chez les assureurs partenaires et des offres premium. L'app devient indispensable.</div>
-    </div>
+    <footer>
+      <div class="footer-logo">
+        <em>Barka</em>Pay <span>× TotalEnergies</span>
+      </div>
+      <div class="footer-meta">Burkina Faso · 2026 · Document Confidentiel</div>
+    </footer>
 
-    <div style="background:var(--navy-card);border:1px solid rgba(255,255,255,0.06);border-radius:var(--radius);padding:2rem;position:relative;overflow:hidden;">
-      <div style="position:absolute;top:1rem;right:1rem;font-size:0.65rem;letter-spacing:0.1em;text-transform:uppercase;background:rgba(218,41,28,0.1);color:#ff7a6e;border:1px solid rgba(218,41,28,0.2);padding:0.2rem 0.5rem;border-radius:100px;">Inclusion financière</div>
-      <div style="font-size:2rem;margin-bottom:1rem;">📵</div>
-      <div style="font-family:'Syne',sans-serif;font-weight:700;font-size:1rem;margin-bottom:0.7rem;">Mode Hors-Ligne USSD</div>
-      <div style="font-size:0.875rem;color:var(--gray);line-height:1.65;">Zones rurales sans internet ? BarkaPay fonctionne via USSD (*#BARKA#). Le client compose un code, reçoit un token SMS valable 10 minutes. Zéro exclusion, 100% de couverture Burkina.</div>
-    </div>
+    <script>
+      /* ── CURSOR ── */
+      const cursor = document.getElementById("cursor");
+      const ring = document.getElementById("ring");
+      let mx = 0,
+        my = 0,
+        rx = 0,
+        ry = 0;
+      document.addEventListener("mousemove", (e) => {
+        mx = e.clientX;
+        my = e.clientY;
+        cursor.style.left = mx + "px";
+        cursor.style.top = my + "px";
+      });
+      function animRing() {
+        rx += (mx - rx) * 0.12;
+        ry += (my - ry) * 0.12;
+        ring.style.left = rx + "px";
+        ring.style.top = ry + "px";
+        requestAnimationFrame(animRing);
+      }
+      animRing();
 
-    <div style="background:var(--navy-card);border:1px solid rgba(255,255,255,0.06);border-radius:var(--radius);padding:2rem;position:relative;overflow:hidden;">
-      <div style="position:absolute;top:1rem;right:1rem;font-size:0.65rem;letter-spacing:0.1em;text-transform:uppercase;background:rgba(80,190,135,0.1);color:var(--te-green);border:1px solid rgba(80,190,135,0.2);padding:0.2rem 0.5rem;border-radius:100px;">B2B stratégique</div>
-      <div style="font-size:2rem;margin-bottom:1rem;">🚛</div>
-      <div style="font-family:'Syne',sans-serif;font-weight:700;font-size:1rem;margin-bottom:0.7rem;">Carte Virtuelle Entreprise</div>
-      <div style="font-size:0.875rem;color:var(--gray);line-height:1.65;">Les entreprises reçoivent une carte virtuelle BarkaPay par véhicule. Plafond configurable, usage restreint aux stations Total, reçus automatiques. Fini les remboursements de notes de frais.</div>
-    </div>
+      /* ── CHART DEFAULTS ── */
+      Chart.defaults.color = "#6B6760";
+      Chart.defaults.borderColor = "rgba(240,236,230,0.06)";
+      Chart.defaults.font.family = "'DM Sans', sans-serif";
+      Chart.defaults.font.size = 11;
+      const RED = "#DA291C",
+        GOLD = "#C9A84C",
+        GOLD2 = "#E8C97A",
+        MUTED = "rgba(240,236,230,0.12)";
+      const grid = { color: "rgba(240,236,230,0.04)", drawBorder: false };
+      const ticks = { padding: 8 };
 
-    <div style="background:var(--navy-card);border:1px solid rgba(255,255,255,0.06);border-radius:var(--radius);padding:2rem;position:relative;overflow:hidden;">
-      <div style="position:absolute;top:1rem;right:1rem;font-size:0.65rem;letter-spacing:0.1em;text-transform:uppercase;background:rgba(8,94,189,0.1);color:var(--te-blue);border:1px solid rgba(8,94,189,0.2);padding:0.2rem 0.5rem;border-radius:100px;">Monétisation data</div>
-      <div style="font-size:2rem;margin-bottom:1rem;">🧠</div>
-      <div style="font-family:'Syne',sans-serif;font-weight:700;font-size:1rem;margin-bottom:0.7rem;">Intelligence Carburant UEMOA</div>
-      <div style="font-size:0.875rem;color:var(--gray);line-height:1.65;">BarkaPay agrège des données anonymisées sur les habitudes de consommation carburant par zone, heure, profil. TotalEnergies accède à ces insights pour piloter son réseau Burkina Faso.</div>
-    </div>
+      /* ── TABS ── */
+      function switchTab(id, btn) {
+        document
+          .querySelectorAll(".chart-panel")
+          .forEach((p) => p.classList.remove("active"));
+        document
+          .querySelectorAll(".tab-btn")
+          .forEach((b) => b.classList.remove("active"));
+        document.getElementById(id).classList.add("active");
+        btn.classList.add("active");
+      }
 
-  </div>
-</section>
+      /* ── CHARTS ── */
+      new Chart(document.getElementById("cRevenue"), {
+        type: "bar",
+        data: {
+          labels: ["Année 1", "Année 2", "Année 3"],
+          datasets: [
+            {
+              data: [40.6, 169, 462],
+              backgroundColor: [RED, GOLD, GOLD2],
+              borderWidth: 0,
+              borderRadius: 2,
+              borderSkipped: false,
+            },
+          ],
+        },
+        options: {
+          responsive: true,
+          maintainAspectRatio: true,
+          plugins: {
+            legend: { display: false },
+            tooltip: { callbacks: { label: (c) => ` ${c.raw} Mds FCFA` } },
+          },
+          scales: {
+            y: { grid, ticks: { ...ticks, callback: (v) => `${v} Mds` } },
+            x: { grid: { display: false }, ticks },
+          },
+        },
+      });
+      new Chart(document.getElementById("cMargin"), {
+        type: "line",
+        data: {
+          labels: ["Année 1", "Année 2", "Année 3"],
+          datasets: [
+            {
+              data: [97.4, 96.9, 96.5],
+              borderColor: GOLD,
+              backgroundColor: "rgba(201,168,76,.07)",
+              borderWidth: 2.5,
+              fill: true,
+              tension: 0.4,
+              pointBackgroundColor: GOLD,
+              pointRadius: 5,
+            },
+          ],
+        },
+        options: {
+          responsive: true,
+          maintainAspectRatio: true,
+          plugins: { legend: { display: false } },
+          scales: {
+            y: {
+              min: 94,
+              max: 100,
+              grid,
+              ticks: { ...ticks, callback: (v) => `${v}%` },
+            },
+            x: { grid: { display: false }, ticks },
+          },
+        },
+      });
+      new Chart(document.getElementById("cTxn"), {
+        type: "bar",
+        data: {
+          labels: ["Année 1", "Année 2", "Année 3"],
+          datasets: [
+            {
+              data: [2, 10, 25],
+              backgroundColor: [
+                "rgba(218,41,28,.5)",
+                "rgba(218,41,28,.75)",
+                RED,
+              ],
+              borderWidth: 0,
+              borderRadius: 2,
+              borderSkipped: false,
+            },
+          ],
+        },
+        options: {
+          responsive: true,
+          maintainAspectRatio: true,
+          plugins: { legend: { display: false } },
+          scales: {
+            y: { grid, ticks: { ...ticks, callback: (v) => `${v}M` } },
+            x: { grid: { display: false }, ticks },
+          },
+        },
+      });
+      new Chart(document.getElementById("cBreak"), {
+        type: "doughnut",
+        data: {
+          labels: [
+            "Frais Transaction",
+            "Frais Recharge",
+            "Premium B2B",
+            "Intérêts",
+          ],
+          datasets: [
+            {
+              data: [40, 20, 1.5, 0.5],
+              backgroundColor: [
+                RED,
+                GOLD,
+                "rgba(201,168,76,.4)",
+                "rgba(218,41,28,.3)",
+              ],
+              borderWidth: 2,
+              borderColor: "#111114",
+              hoverOffset: 4,
+            },
+          ],
+        },
+        options: {
+          responsive: true,
+          maintainAspectRatio: true,
+          cutout: "68%",
+          plugins: {
+            legend: {
+              position: "bottom",
+              labels: {
+                boxWidth: 8,
+                padding: 12,
+                usePointStyle: true,
+                pointStyle: "circle",
+                color: "#6B6760",
+              },
+            },
+          },
+        },
+      });
+      const months = Array.from({ length: 37 }, (_, i) => i);
+      new Chart(document.getElementById("cUsers"), {
+        type: "line",
+        data: {
+          labels: months.map((m) => (m === 0 ? "MVP" : `M${m}`)),
+          datasets: [
+            {
+              label: "Utilisateurs (K)",
+              data: months.map((m) => {
+                if (m === 0) return 0.005;
+                if (m <= 12)
+                  return 0.005 + (500 - 0.005) * Math.pow(m / 12, 2.5);
+                if (m <= 24)
+                  return 500 + (2000 - 500) * Math.pow((m - 12) / 12, 1.8);
+                return 2000 + (5000 - 2000) * Math.pow((m - 24) / 12, 1.5);
+              }),
+              borderColor: RED,
+              backgroundColor: "rgba(218,41,28,.07)",
+              borderWidth: 2.5,
+              fill: true,
+              tension: 0.4,
+              pointRadius: 0,
+              pointHoverRadius: 5,
+            },
+          ],
+        },
+        options: {
+          responsive: true,
+          maintainAspectRatio: true,
+          plugins: { legend: { display: false } },
+          scales: {
+            y: { grid, ticks: { ...ticks, callback: (v) => `${v}K` } },
+            x: {
+              grid: { display: false },
+              ticks: { ...ticks, maxTicksLimit: 13 },
+            },
+          },
+        },
+      });
+      new Chart(document.getElementById("cProfit"), {
+        type: "bar",
+        data: {
+          labels: ["Année 1", "Année 2", "Année 3"],
+          datasets: [
+            {
+              label: "Revenus",
+              data: [40.6, 169, 462],
+              backgroundColor: RED,
+              borderRadius: 2,
+              borderSkipped: false,
+              borderWidth: 0,
+            },
+            {
+              label: "Coûts",
+              data: [1.3, 5.6, 16.4],
+              backgroundColor: "rgba(240,236,230,0.15)",
+              borderRadius: 2,
+              borderSkipped: false,
+              borderWidth: 0,
+            },
+            {
+              label: "Bénéfice",
+              data: [39.3, 163.4, 445.6],
+              backgroundColor: GOLD,
+              borderRadius: 2,
+              borderSkipped: false,
+              borderWidth: 0,
+            },
+          ],
+        },
+        options: {
+          responsive: true,
+          maintainAspectRatio: true,
+          plugins: {
+            legend: {
+              position: "top",
+              labels: {
+                boxWidth: 8,
+                padding: 16,
+                usePointStyle: true,
+                pointStyle: "circle",
+                color: "#6B6760",
+              },
+            },
+          },
+          scales: {
+            y: { grid, ticks: { ...ticks, callback: (v) => `${v} Mds` } },
+            x: { grid: { display: false }, ticks },
+          },
+        },
+      });
+      new Chart(document.getElementById("cROI"), {
+        type: "bar",
+        data: {
+          labels: ["Année 1", "Année 2", "Année 3"],
+          datasets: [
+            {
+              data: [3826, 3025, 2620],
+              backgroundColor: [RED, GOLD, "rgba(201,168,76,.6)"],
+              borderWidth: 0,
+              borderRadius: 2,
+              borderSkipped: false,
+            },
+          ],
+        },
+        options: {
+          responsive: true,
+          maintainAspectRatio: true,
+          plugins: {
+            legend: { display: false },
+            tooltip: {
+              callbacks: { label: (c) => ` ROI: ${c.raw.toLocaleString()}%` },
+            },
+          },
+          scales: {
+            y: { grid, ticks: { ...ticks, callback: (v) => `${v}%` } },
+            x: { grid: { display: false }, ticks },
+          },
+        },
+      });
 
-<!-- CTA -->
-<section id="cta" class="cta-section">
-  <div class="cta-content">
-    <h2 class="cta-title">Digitalisons ensemble<br>le Burkina <span>TotalEnergies.</span></h2>
-    <p class="cta-sub">MVP en 3 mois · 40.6 Mds FCFA revenus An.1 · ROI 3826% · 500K utilisateurs · Ouagadougou + Bobo-Dioulasso</p>
-    <button class="btn-white" onclick="alert('Prenez contact pour initier le partenariat BarkaPay × TotalEnergies Burkina Faso !')">Engager le Partenariat →</button>
-  </div>
-</section>
+      /* ── SCROLL REVEAL ── */
+      const obs = new IntersectionObserver(
+        (entries) => {
+          entries.forEach((e) => {
+            if (e.isIntersecting) {
+              e.target.classList.add("in");
+              obs.unobserve(e.target);
+            }
+          });
+        },
+        { threshold: 0.07 },
+      );
+      document
+        .querySelectorAll(".reveal,.reveal-left,.stagger")
+        .forEach((el) => obs.observe(el));
 
-<footer>
-  <div class="footer-logo"><span class="bp">BarkaPay</span><span class="sep"> × </span><span class="te">TotalEnergies</span></div>
-  <div class="footer-info">Burkina Faso · Afrique de l'Ouest · FinTech · 2026</div>
-  <div class="footer-meta">Version 4.0 · Mai 2026<br>Document Confidentiel — Partenariat</div>
-</footer>
-
-<script>
-/* ─── TABS ─── */
-function switchTab(tabId, btn) {
-  document.querySelectorAll('.chart-panel').forEach(p => p.classList.remove('active'));
-  document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
-  document.getElementById(tabId).classList.add('active');
-  btn.classList.add('active');
-}
-
-/* ─── CHART DEFAULTS ─── */
-Chart.defaults.color = '#7A8899';
-Chart.defaults.borderColor = 'rgba(255,255,255,0.05)';
-Chart.defaults.font.family = "'Plus Jakarta Sans', sans-serif";
-Chart.defaults.font.size = 11;
-
-/* TotalEnergies spectrum colors */
-const C = {
-  red:    '#DA291C',
-  orange: '#F16E00',
-  yellow: '#FFD700',
-  green:  '#50BE87',
-  blue:   '#085EBD',
-  indigo: '#3B4DA0',
-  violet: '#7B2D8B',
-  gold:   '#F5A623',
-  navy2:  '#1E3A5F',
-  gray:   '#7A8899',
-};
-
-const spectrum = [C.red, C.orange, C.yellow, C.green, C.blue, C.indigo, C.violet];
-
-const gridOpts = { color: 'rgba(255,255,255,0.04)', drawBorder: false };
-const tickOpts = { padding: 8 };
-
-/* ─── REVENUE BAR ─── */
-new Chart(document.getElementById('chartRevenue'), {
-  type: 'bar',
-  data: {
-    labels: ['Année 1', 'Année 2', 'Année 3'],
-    datasets: [{
-      data: [40.6, 169, 462],
-      backgroundColor: [C.red, C.orange, C.green],
-      borderWidth: 0, borderRadius: 4, borderSkipped: false,
-    }]
-  },
-  options: {
-    responsive: true, maintainAspectRatio: true,
-    plugins: { legend: { display: false }, tooltip: { callbacks: { label: ctx => ` ${ctx.raw} Mds FCFA` } } },
-    scales: {
-      y: { grid: gridOpts, ticks: { ...tickOpts, callback: v => `${v} Mds` } },
-      x: { grid: { display: false }, ticks: tickOpts }
-    }
-  }
-});
-
-/* ─── DOUGHNUT ─── */
-new Chart(document.getElementById('chartBreakdown1'), {
-  type: 'doughnut',
-  data: {
-    labels: ['Frais Transaction', 'Frais Recharge', 'Services Premium', 'Intérêts'],
-    datasets: [{
-      data: [40, 20, 1.5, 0.5],
-      backgroundColor: [C.red, C.orange, C.green, C.blue],
-      borderWidth: 2, borderColor: '#0C1A2E',
-      hoverOffset: 6,
-    }]
-  },
-  options: {
-    responsive: true, maintainAspectRatio: true,
-    plugins: {
-      legend: { position: 'bottom', labels: { boxWidth: 8, padding: 12, usePointStyle: true, pointStyle: 'circle' } },
-      tooltip: { callbacks: { label: ctx => ` ${ctx.label}: ${ctx.raw} Mds FCFA` } }
-    },
-    cutout: '68%',
-  }
-});
-
-/* ─── TRANSACTIONS ─── */
-new Chart(document.getElementById('chartTransactions'), {
-  type: 'bar',
-  data: {
-    labels: ['Année 1', 'Année 2', 'Année 3'],
-    datasets: [{
-      data: [2, 10, 25],
-      backgroundColor: [C.blue, C.indigo, C.violet],
-      borderWidth: 0, borderRadius: 4, borderSkipped: false,
-    }]
-  },
-  options: {
-    responsive: true, maintainAspectRatio: true,
-    plugins: { legend: { display: false }, tooltip: { callbacks: { label: ctx => ` ${ctx.raw}M transactions/mois` } } },
-    scales: {
-      y: { grid: gridOpts, ticks: { ...tickOpts, callback: v => `${v}M` } },
-      x: { grid: { display: false }, ticks: tickOpts }
-    }
-  }
-});
-
-/* ─── MARGIN ─── */
-new Chart(document.getElementById('chartMargin'), {
-  type: 'line',
-  data: {
-    labels: ['Année 1', 'Année 2', 'Année 3'],
-    datasets: [{
-      data: [97.4, 96.9, 96.5],
-      borderColor: C.green, backgroundColor: 'rgba(80,190,135,0.08)',
-      borderWidth: 2.5, fill: true, tension: 0.4,
-      pointBackgroundColor: C.green, pointRadius: 5, pointHoverRadius: 7,
-    }]
-  },
-  options: {
-    responsive: true, maintainAspectRatio: true,
-    plugins: { legend: { display: false }, tooltip: { callbacks: { label: ctx => ` ${ctx.raw}% marge brute` } } },
-    scales: {
-      y: { min: 94, max: 100, grid: gridOpts, ticks: { ...tickOpts, callback: v => `${v}%` } },
-      x: { grid: { display: false }, ticks: tickOpts }
-    }
-  }
-});
-
-/* ─── USERS GROWTH ─── */
-const months = Array.from({length: 37}, (_, i) => i);
-const usersData = months.map(m => {
-  if (m === 0) return 0.005;
-  if (m <= 12) return 0.005 + (500 - 0.005) * Math.pow(m / 12, 2.5);
-  if (m <= 24) return 500 + (2000 - 500) * Math.pow((m - 12) / 12, 1.8);
-  return 2000 + (5000 - 2000) * Math.pow((m - 24) / 12, 1.5);
-});
-new Chart(document.getElementById('chartUsers'), {
-  type: 'line',
-  data: {
-    labels: months.map(m => m === 0 ? 'MVP' : `M${m}`),
-    datasets: [{
-      label: 'Utilisateurs actifs (K)',
-      data: usersData,
-      borderColor: C.orange, backgroundColor: 'rgba(241,110,0,0.07)',
-      borderWidth: 2.5, fill: true, tension: 0.4,
-      pointRadius: 0, pointHoverRadius: 5, pointHoverBackgroundColor: C.orange,
-    }]
-  },
-  options: {
-    responsive: true, maintainAspectRatio: true,
-    plugins: { legend: { display: false }, tooltip: { callbacks: { label: ctx => ` ${Math.round(ctx.raw)}K utilisateurs` } } },
-    scales: {
-      y: { grid: gridOpts, ticks: { ...tickOpts, callback: v => `${v}K` } },
-      x: { grid: { display: false }, ticks: { ...tickOpts, maxTicksLimit: 13 } }
-    }
-  }
-});
-
-/* ─── PROFITABILITY ─── */
-new Chart(document.getElementById('chartProfit'), {
-  type: 'bar',
-  data: {
-    labels: ['Année 1', 'Année 2', 'Année 3'],
-    datasets: [
-      { label: 'Revenus', data: [40.6, 169, 462], backgroundColor: C.blue, borderRadius: 4, borderSkipped: false, borderWidth: 0 },
-      { label: 'Coûts', data: [1.3, 5.6, 16.4], backgroundColor: C.orange, borderRadius: 4, borderSkipped: false, borderWidth: 0 },
-      { label: 'Bénéfice Net', data: [39.3, 163.4, 445.6], backgroundColor: C.green, borderRadius: 4, borderSkipped: false, borderWidth: 0 },
-    ]
-  },
-  options: {
-    responsive: true, maintainAspectRatio: true,
-    plugins: {
-      legend: { position: 'top', labels: { boxWidth: 8, padding: 16, usePointStyle: true, pointStyle: 'circle' } },
-      tooltip: { callbacks: { label: ctx => ` ${ctx.dataset.label}: ${ctx.raw} Mds FCFA` } }
-    },
-    scales: {
-      y: { grid: gridOpts, ticks: { ...tickOpts, callback: v => `${v} Mds` } },
-      x: { grid: { display: false }, ticks: tickOpts }
-    }
-  }
-});
-
-/* ─── ROI ─── */
-new Chart(document.getElementById('chartROI'), {
-  type: 'bar',
-  data: {
-    labels: ['Année 1', 'Année 2', 'Année 3'],
-    datasets: [{
-      data: [3826, 3025, 2620],
-      backgroundColor: [C.red, C.orange, C.gold],
-      borderWidth: 0, borderRadius: 4, borderSkipped: false,
-    }]
-  },
-  options: {
-    responsive: true, maintainAspectRatio: true,
-    plugins: { legend: { display: false }, tooltip: { callbacks: { label: ctx => ` ROI: ${ctx.raw.toLocaleString()}%` } } },
-    scales: {
-      y: { grid: gridOpts, ticks: { ...tickOpts, callback: v => `${v}%` } },
-      x: { grid: { display: false }, ticks: tickOpts }
-    }
-  }
-});
-
-/* ─── SCROLL REVEAL ─── */
-const observer = new IntersectionObserver((entries) => {
-  entries.forEach(e => { if (e.isIntersecting) { e.target.classList.add('visible'); observer.unobserve(e.target); } });
-}, { threshold: 0.08 });
-document.querySelectorAll('.reveal').forEach(el => observer.observe(el));
-</script>
-</body>
+      /* ── COUNT UP ── */
+      function countUp(el, target, duration = 2000) {
+        const start = performance.now();
+        const isDecimal = target % 1 !== 0;
+        function frame(ts) {
+          const p = Math.min((ts - start) / duration, 1);
+          const ease = p < 0.5 ? 2 * p * p : (4 - 2 * p) * p - 1;
+          const val = target * ease;
+          el.textContent = isDecimal
+            ? val.toFixed(1)
+            : Math.round(val).toLocaleString();
+          if (p < 1) requestAnimationFrame(frame);
+        }
+        requestAnimationFrame(frame);
+      }
+      const cobs = new IntersectionObserver(
+        (entries) => {
+          entries.forEach((e) => {
+            if (e.isIntersecting) {
+              countUp(e.target, parseFloat(e.target.dataset.target));
+              cobs.unobserve(e.target);
+            }
+          });
+        },
+        { threshold: 0.5 },
+      );
+      document.querySelectorAll(".count-up").forEach((el) => cobs.observe(el));
+    </script>
+  </body>
 </html>
